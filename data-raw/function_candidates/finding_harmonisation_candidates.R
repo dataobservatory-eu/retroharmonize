@@ -18,10 +18,14 @@ search_variables <- function(
     )
 }
 
+source(here::here("data-raw", "function_candidates", "create_variable_catalog.R"))
+gesis_dir <- here::here("data-raw", "gesis")
+gesis_files <- dir(gesis_dir)
+gesis_files <- gesis_files[which(grepl(".sav", gesis_files))]
 
 catalog <- create_variable_catalog(
-  survey_files = gesis_files$survey_file,
-  dataset_id = gesis_files$dataset_id
+  survey_files = here::here("data-raw", "gesis", gesis_files),
+  dataset_id = substr(gesis_files, 1, 6)
 )
 
 library(dplyr)
@@ -110,11 +114,11 @@ attachment_variables <- identity_vars %>%
 
 # different coding
 ZA4529 <- read_survey(here::here("data-raw", "gesis", "ZA4529_v3-0-1.sav"))
+ZA7780 <- read_survey(here::here("data-raw", "gesis", "ZA7780_v2-0-0.sav"))
 
 ZA8905 <- read_survey(here::here("data-raw", "gesis", "ZA8905_v1-0-0.sav"))
 ZA8843  <- read_survey(here::here("data-raw", "gesis", "ZA8843_v1-0-0.sav"))
 ZA8779  <- read_survey(here::here("data-raw", "gesis", "ZA8779_v1-0-0.sav"))
-ZA7780 <- read_survey(here::here("data-raw", "gesis", "ZA7780_v2-0-0.sav"))
 
 surveys <- list(
   ZA8779 = ZA8779,
