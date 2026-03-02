@@ -1,46 +1,81 @@
-#' @title Read survey file(s)
+#' Read survey files into memory or save as `.rds`
 #'
-#' @description Import surveys into a list or several \code{.rds} files.
+#' Import one or more survey files into R using a consistent survey
+#' import workflow. The function supports SPSS (`.sav`, `.por`),
+#' Stata (`.dta`), R (`.rds`), and CSV files.
 #'
-#' @details Use \code{read_survey} for a single survey and \code{read_surveys} for several surveys in
-#' in a loop. The function handle exceptions with wrong file names and not readable
-#' files. If a file cannot be read, a message is printed, and empty survey is added to the
-#' the list in the place of this file.
+#' Use [read_survey()] to import a single survey file and
+#' `read_surveys()` to import multiple files in a loop.
 #'
-#' @param survey_paths A vector of (full) file paths that contain the surveys to import.
-#' @param .f A function to import the surveys with.
-#' Defaults to \code{'NULL'}, in this case files with an extension of \code{'.sav'} and \code{'.por'}
-#' will call case \code{\link{read_spss}}, files with an extension of \code{'.dta'} will
-#' call \code{\link{read_dta}}, \code{rds} will call \code{\link{read_rds}} and
-#' \code{'.csv'} \code{\link{read_csv}}.
-#' @param export_path Defaults to \code{NULL}, in this case the read surveys are imported into a single
-#' list of surveys in memory. If \code{export_path} is a valid directory, it will instead save each
-#' survey an R object with \code{base::\link[base:readRDS]{saveRDS}}.
-#' @param ids The identifiers of the individual surveys.
-#' @param dois The DOIs of the individual surveys.
-#' @param ... Parameters to pass on to the function \code{.f}.
-#' @return A list of the surveys or a vector of the saved file names. See
-#' Each element of the list is a data
-#' frame-like \code{\link{survey}} type object where some metadata,
-#' such as the original file name, doi identifier if present, and other
-#' information is recorded for a reproducible workflow.
-#' @importFrom purrr safely
-#' @importFrom fs path_file
-#' @importFrom assertthat assert_that
+#' When `export_path` is `NULL`, imported surveys are returned as
+#' a list in memory. When `export_path` is a valid directory,
+#' imported surveys are saved as `.rds` files with
+#' [base::saveRDS()].
+#'
+#' Files that cannot be imported are skipped gracefully. A message
+#' is printed and `NULL` is returned for the affected file.
+#'
+#' @param survey_paths A character vector containing full or relative
+#'   paths to survey files.
+#'
+#' @param .f Import function to use. When `NULL`, the appropriate
+#'   import function is selected automatically from the file
+#'   extension.
+#'
+#'   Supported formats are:
+#'
+#'   \describe{
+#'     \item{`.sav`, `.por`}{[read_spss()]}
+#'     \item{`.dta`}{[read_dta()]}
+#'     \item{`.rds`}{[read_rds()]}
+#'     \item{`.csv`}{[read_csv()]}
+#'   }
+#'
+#' @param export_path Optional path where imported surveys should
+#'   be saved as `.rds` files. Defaults to `NULL`.
+#'
+#' @param ids Optional survey identifiers.
+#'
+#' @param dois Optional DOI identifiers for the imported surveys.
+#'
+#' @param ... Additional arguments passed to the import function.
+#'
+#' @return
+#'
+#' If `export_path = NULL`, a list of imported survey objects.
+#'
+#' If `export_path` is provided, a character vector containing
+#' exported `.rds` file names.
+#'
+#' Imported surveys are returned as data frame-like
+#' [survey()] objects with metadata attributes retained for
+#' reproducible workflows.
+#'
 #' @examples
 #' file1 <- system.file(
-#'   "examples", "ZA7576.rds",
-#'   package = "retroharmonize"
-#' )
-#' file2 <- system.file(
-#'   "examples", "ZA5913.rds",
+#'   "examples",
+#'   "ZA7576.rds",
 #'   package = "retroharmonize"
 #' )
 #'
-#' read_surveys(c(file1, file2), .f = "read_rds")
-#' @export
+#' file2 <- system.file(
+#'   "examples",
+#'   "ZA5913.rds",
+#'   package = "retroharmonize"
+#' )
+#'
+#' surveys <- read_surveys(
+#'   c(file1, file2),
+#'   .f = "read_rds"
+#' )
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom fs path_file
+#' @importFrom purrr safely
+#'
 #' @family import functions
-#' @seealso survey
+#' @seealso [read_survey()], [survey()]
+#' @export
 
 read_surveys <- function(survey_paths,
                          .f = NULL,
@@ -60,7 +95,7 @@ read_surveys <- function(survey_paths,
 
   if (length(not_existing_files) > 0) {
     missing_files <- paste(import_file_vector[not_existing_files], collapse = ";\n")
-    warning("Some files on 'survey_pahts' do not exist:\n", missing_files)
+    warning("Some files on 'survey_paths' do not exist:\n", missing_files)
   }
 
   import_file_vector <- import_file_vector[existing_files]
@@ -79,7 +114,7 @@ read_surveys <- function(survey_paths,
 
 
   return_survey_list <- lapply(
-    1:length(import_file_vector),
+    seq_along(import_file_vector),
     function(x) {
       read_survey(
         file_path = import_file_vector[x],

@@ -3,7 +3,7 @@
 \name{read_surveys}
 \alias{read_surveys}
 \alias{read_survey}
-\title{Read survey file(s)}
+\title{Read survey files into memory or save as `.rds`}
 \usage{
 read_surveys(
   survey_paths,
@@ -24,62 +24,87 @@ read_survey(
 )
 }
 \arguments{
-\item{survey_paths}{A vector of (full) file paths that contain the surveys to import.}
+\item{survey_paths}{A character vector containing full or relative
+paths to survey files.}
 
-\item{.f}{A function to import the surveys with.
-Defaults to \code{'NULL'}, in this case files with an extension of \code{'.sav'} and \code{'.por'}
-will call case \code{\link{read_spss}}, files with an extension of \code{'.dta'} will
-call \code{\link{read_dta}}, \code{rds} will call \code{\link{read_rds}} and
-\code{'.csv'} \code{\link{read_csv}}.}
+\item{.f}{Import function to use. When `NULL`, the appropriate
+  import function is selected automatically from the file
+  extension.
 
-\item{export_path}{Defaults to \code{NULL}, in this case the read surveys are imported into a single
-list of surveys in memory. If \code{export_path} is a valid directory, it will instead save each
-survey an R object with \code{base::\link[base:readRDS]{saveRDS}}.}
+  Supported formats are:
 
-\item{ids}{The identifiers of the individual surveys.}
+  \describe{
+    \item{`.sav`, `.por`}{[read_spss()]}
+    \item{`.dta`}{[read_dta()]}
+    \item{`.rds`}{[read_rds()]}
+    \item{`.csv`}{[read_csv()]}
+  }}
 
-\item{dois}{The DOIs of the individual surveys.}
+\item{export_path}{Optional path where imported surveys should
+be saved as `.rds` files. Defaults to `NULL`.}
 
-\item{...}{Parameters to pass on to the function \code{.f}.}
+\item{ids}{Optional survey identifiers.}
+
+\item{dois}{Optional DOI identifiers for the imported surveys.}
+
+\item{...}{Additional arguments passed to the import function.}
 }
 \value{
-A list of the surveys or a vector of the saved file names. See
-Each element of the list is a data
-frame-like \code{\link{survey}} type object where some metadata,
-such as the original file name, doi identifier if present, and other
-information is recorded for a reproducible workflow.
+If `export_path = NULL`, a list of imported survey objects.
+
+If `export_path` is provided, a character vector containing
+exported `.rds` file names.
+
+Imported surveys are returned as data frame-like
+[survey()] objects with metadata attributes retained for
+reproducible workflows.
 }
 \description{
-Import surveys into a list or several \code{.rds} files.
+Import one or more survey files into R using a consistent survey
+import workflow. The function supports SPSS (`.sav`, `.por`),
+Stata (`.dta`), R (`.rds`), and CSV files.
 }
 \details{
-Use \code{read_survey} for a single survey and \code{read_surveys} for several surveys in
-in a loop. The function handle exceptions with wrong file names and not readable
-files. If a file cannot be read, a message is printed, and empty survey is added to the
-the list in the place of this file.
+Use [read_survey()] to import a single survey file and
+`read_surveys()` to import multiple files in a loop.
+
+When `export_path` is `NULL`, imported surveys are returned as
+a list in memory. When `export_path` is a valid directory,
+imported surveys are saved as `.rds` files with
+[base::saveRDS()].
+
+Files that cannot be imported are skipped gracefully. A message
+is printed and `NULL` is returned for the affected file.
 }
 \examples{
 file1 <- system.file(
-  "examples", "ZA7576.rds",
-  package = "retroharmonize"
-)
-file2 <- system.file(
-  "examples", "ZA5913.rds",
+  "examples",
+  "ZA7576.rds",
   package = "retroharmonize"
 )
 
-read_surveys(c(file1, file2), .f = "read_rds")
+file2 <- system.file(
+  "examples",
+  "ZA5913.rds",
+  package = "retroharmonize"
+)
+
+surveys <- read_surveys(
+  c(file1, file2),
+  .f = "read_rds"
+)
+
 }
 \seealso{
-survey
+[read_survey()], [survey()]
 
-Other import functions: 
-\code{\link{harmonize_survey_variables}()},
-\code{\link{pull_survey}()},
-\code{\link{read_csv}()},
-\code{\link{read_dta}()},
-\code{\link{read_rds}()},
-\code{\link{read_spss}()}
+Other import functions:
+\code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
+\code{\link[=pull_survey]{pull_survey()}},
+\code{\link[=read_csv]{read_csv()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_rds]{read_rds()}},
+\code{\link[=read_spss]{read_spss()}}
 }
 \concept{import functions}
 \keyword{internal}
