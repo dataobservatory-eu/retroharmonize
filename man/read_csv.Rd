@@ -2,55 +2,71 @@
 % Please edit documentation in R/read_csv.R
 \name{read_csv}
 \alias{read_csv}
-\title{Read csv file}
+\title{Read a survey dataset from a CSV file}
 \usage{
 read_csv(file, id = NULL, doi = NULL, dataset_bibentry = NULL, ...)
 }
 \arguments{
-\item{file}{A path to a file to import.}
+\item{file}{Path to a `.csv` file.}
 
-\item{id}{An identifier of the tibble, if omitted, defaults to the
-file name without its extension.}
+\item{id}{Optional dataset identifier. When omitted, the file name
+without extension is used.}
 
-\item{doi}{An optional document object identifier.}
+\item{doi}{Optional dataset DOI identifier.}
 
-\item{dataset_bibentry}{A bibliographic entry created with
-\code{dataset::\link[dataset:dublincore]{dublincore}} or
-\code{dataset::\link[dataset:datacite]{datacite}}.}
+\item{dataset_bibentry}{Optional bibliographic metadata created
+with [dataset::dublincore()] or [dataset::datacite()].}
 
-\item{...}{Further optional parameters to pass on to
-\code{utils::\link[utils:read.csv]{read.csv}}.}
+\item{...}{Additional arguments passed to
+[utils::read.csv()].}
 }
 \value{
-A tibble, data frame variant with survey attributes.
+A tibble-like survey object with metadata attributes
+  retained for reproducible workflows.
 }
 \description{
-Import a survey from a csv file.
+Import a survey dataset stored in comma-separated value (`.csv`)
+format and convert it into a survey-compatible tibble with
+reproducibility metadata retained as attributes.
+}
+\details{
+The imported object is returned as a tibble with additional survey
+metadata such as identifiers, DOI references, and optional dataset
+bibliographic metadata.
 }
 \examples{
 # Create a temporary CSV file:
-path <- system.file("examples", "ZA7576.rds", 
-                    package = "retroharmonize")
+path <- system.file(
+  "examples",
+  "ZA7576.rds",
+  package = "retroharmonize"
+)
+
 read_survey <- read_rds(path)
-test_csv_file <- tempfile()
-write.csv(x = read_survey, 
-          file = test_csv_file, 
-          row.names = FALSE)
-         
+
+test_csv_file <- tempfile(fileext = ".csv")
+
+write.csv(
+  x = read_survey,
+  file = test_csv_file,
+  row.names = FALSE
+)
+
 # Read the CSV file:
 re_read <- read_csv(
   file = test_csv_file,
-  id = "ZA7576", 
+  id = "ZA7576",
   doi = "test_doi"
 )
+
 }
 \seealso{
-Other import functions: 
-\code{\link{harmonize_survey_variables}()},
-\code{\link{pull_survey}()},
-\code{\link{read_dta}()},
-\code{\link{read_rds}()},
-\code{\link{read_spss}()},
-\code{\link{read_surveys}()}
+Other import functions:
+\code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
+\code{\link[=pull_survey]{pull_survey()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_rds]{read_rds()}},
+\code{\link[=read_spss]{read_spss()}},
+\code{\link[=read_surveys]{read_surveys()}}
 }
 \concept{import functions}
