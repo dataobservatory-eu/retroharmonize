@@ -2,60 +2,81 @@
 % Please edit documentation in R/metadata_create.R
 \name{metadata_survey_create}
 \alias{metadata_survey_create}
-\title{Create a metadata table}
+\title{Create variable-level metadata from a survey dataset}
 \usage{
 metadata_survey_create(survey)
 }
 \arguments{
-\item{survey}{A survey data frame. You receive a survey object with any importing function, i.e.
-\code{\link{read_rds}}, \code{\link{read_spss}} \code{\link{read_dta}}, \code{\link{read_csv}} or
-their common wrapper \code{\link{read_survey}}.
-You can construct it with \code{\link{survey}} from a data frame, too.}
+\item{survey}{A survey object of class [survey()].
+
+  Survey objects are typically created with:
+
+  \itemize{
+    \item [read_rds()]
+    \item [read_spss()]
+    \item [read_dta()]
+    \item [read_csv()]
+    \item [read_survey()]
+  }
+
+  Survey objects can also be created manually from a data frame
+  with [survey()].}
 }
 \value{
-A nested data frame with metadata and the range of
-labels, na_values and the na_range itself.
+A nested data frame containing:
+
+\describe{
+  \item{filename}{Original survey file name.}
+  \item{id}{Survey identifier.}
+  \item{var_name_orig}{Original variable name.}
+  \item{class_orig}{Imported storage class.}
+  \item{var_label_orig}{Original variable label.}
+  \item{labels}{List column of value labels.}
+  \item{valid_labels}{List column of non-missing value labels.}
+  \item{na_labels}{List column of user-defined missing labels.}
+  \item{na_range}{List column containing user-defined missing ranges.}
+  \item{n_labels}{Number of labelled categories.}
+  \item{n_valid_labels}{Number of non-missing categories.}
+  \item{n_na_labels}{Number of missing categories.}
+}
 }
 \description{
-Create a metadata table from the survey data files.
+Extract variable-level metadata from a survey dataset and return
+the result as a nested data frame.
 }
 \details{
-A data frame like tibble object is returned.
-In case you are working with several surveys, a list of surveys or a vector
-of file names containing the full path to the survey must be called with
-[metadata_create()], which is a wrapper around
-a list of  [metadata_survey_create()] calls.
+The metadata table contains:
 
-The structure of the returned tibble:
-\describe{
-  \item{filename}{The original file name; if present; \code{missing}, if a non-\code{\link{survey}} data frame is used as input \code{survey}.}
-  \item{id}{The ID of the survey, if present; \code{missing}, if a non-\code{\link{survey}} data frame is used as input \code{survey}.}
-  \item{var_name_orig}{The original variable name in SPSS.}
-  \item{class_orig}{The original variable class after importing with\code{\link[haven]{read_spss}}.}
-  \item{var_label_orig}{The original variable label in SPSS.}
-  \item{labels}{A list of the value labels.}
-  \item{valid_labels}{A list of the value labels that are not marked as missing values.}
-  \item{na_labels}{A list of the value labels that refer to user-defined missing values.}
-  \item{na_range}{An optional range of a continuous missing range, if present in the vector.}
-  \item{n_labels}{Number of categories or unique levels, which may be different from the sum of missing and category labels.}
-  \item{n_valid_labels}{Number of categories in the non-missing range.}
-  \item{n_na_labels}{Number of categories of the variable, should be the sum of the former two.}
-  \item{na_levels}{A list of the user-defined missing values.}
+\itemize{
+  \item variable names and labels,
+  \item imported storage classes,
+  \item value labels,
+  \item user-defined missing values,
+  \item missing value ranges,
+  \item and summary counts of labelled categories.
 }
+
+For multiple surveys, use [metadata_create()], which applies
+`metadata_survey_create()` across a list of surveys or survey files.
 }
 \examples{
-metadata_create(
-  survey_list = read_rds(
-    system.file("examples", "ZA7576.rds",
+metadata_survey_create(
+  survey = read_rds(
+    system.file(
+      "examples",
+      "ZA7576.rds",
       package = "retroharmonize"
     )
   )
 )
+
 }
 \seealso{
-Other metadata functions: 
-\code{\link{create_codebook}()},
-\code{\link{is.crosswalk_table}()},
-\code{\link{metadata_create}()}
+[metadata_create()], [create_variable_catalog()]
+
+Other metadata functions:
+\code{\link[=create_codebook]{create_codebook()}},
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}},
+\code{\link[=metadata_create]{metadata_create()}}
 }
 \concept{metadata functions}

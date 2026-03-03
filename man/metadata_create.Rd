@@ -3,40 +3,71 @@
 \name{metadata_create}
 \alias{metadata_create}
 \alias{metadata_waves_create}
-\title{Create a metadata table from several surveys}
+\title{Create metadata tables from survey datasets}
 \usage{
 metadata_create(survey_list = NULL, survey_paths = NULL, .f = NULL)
 
 metadata_waves_create(survey_list)
 }
 \arguments{
-\item{survey_list}{A list containing surveys of class survey.}
+\item{survey_list}{Optional list of survey objects of class
+[survey()].}
 
-\item{survey_paths}{Optional character vector of file paths to surveys.}
+\item{survey_paths}{Optional character vector containing paths to
+survey files.}
 
-\item{.f}{A function to import the surveys with.}
+\item{.f}{Import function used to read surveys from
+`survey_paths`. When `NULL`, the import function is inferred from
+the file extension.}
+}
+\value{
+A data frame containing variable-level survey metadata.
 }
 \description{
-Create a metadata table from several surveys
+Create a variable-level metadata table from one or more survey
+datasets. Metadata are extracted either from survey objects already
+loaded into memory or directly from survey files.
 }
 \details{
+The resulting metadata table contains information about:
+
+\itemize{
+  \item variable names and labels,
+  \item storage classes,
+  \item value labels,
+  \item user-defined missing values,
+  \item and missing value ranges.
+}
+
+`metadata_create()` is a convenience wrapper around repeated
+[metadata_survey_create()] calls.
+
 The form \code{metadata_waves_create} is deprecated.
 }
 \examples{
-examples_dir <- system.file("examples", package = "retroharmonize")
+examples_dir <- system.file(
+  "examples",
+  package = "retroharmonize"
+)
 
 my_rds_files <- dir(examples_dir)[grepl(
-  ".rds",
+  "\\\\.rds$",
   dir(examples_dir)
 )]
 
-example_surveys <- read_surveys(file.path(examples_dir, my_rds_files))
+example_surveys <- read_surveys(
+  file.path(examples_dir, my_rds_files)
+)
+
 metadata_create(example_surveys)
+
 }
 \seealso{
-Other metadata functions: 
-\code{\link{create_codebook}()},
-\code{\link{is.crosswalk_table}()},
-\code{\link{metadata_survey_create}()}
+[metadata_survey_create()], [create_variable_catalog()]
+
+Other metadata functions:
+\code{\link[=create_codebook]{create_codebook()}},
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}},
+\code{\link[=metadata_survey_create]{metadata_survey_create()}}
 }
 \concept{metadata functions}
