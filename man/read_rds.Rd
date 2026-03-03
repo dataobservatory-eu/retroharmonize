@@ -2,42 +2,68 @@
 % Please edit documentation in R/read_rds.R
 \name{read_rds}
 \alias{read_rds}
-\title{Read rds file}
+\title{Read a survey from an `.rds` file}
 \usage{
 read_rds(file, dataset_bibentry = NULL, id = NULL, doi = NULL)
 }
 \arguments{
-\item{file}{A path to a file to import.}
+\item{file}{Path to an `.rds` file containing a survey object.}
 
-\item{dataset_bibentry}{A bibliographic entry created with
-\code{dataset::\link[dataset:dublincore]{dublincore}} or
-\code{dataset::\link[dataset:datacite]{datacite}}.}
+\item{dataset_bibentry}{Optional bibliographic metadata created with
+[dataset::dublincore()] or [dataset::datacite()].}
 
-\item{id}{An identifier of the tibble, if omitted, defaults to the
-file name without its extension.}
+\item{id}{Optional survey identifier. Defaults to the file name
+without extension.}
 
-\item{doi}{An optional document object identifier.}
+\item{doi}{Optional DOI identifier for the survey.}
 }
 \value{
-A tibble, data frame variant with survey attributes.
+A `survey` object inheriting from `data.frame` and `tbl_df`
+  with survey metadata attributes.
 }
 \description{
-Import a survey from an rds file.
+Import a serialized survey object stored in `.rds` format and return
+it as a `survey` object with harmonized metadata attributes.
+}
+\details{
+This function restores survey objects previously saved with
+[base::saveRDS()] or exported from the `retroharmonize`
+workflow. The returned object retains survey metadata and gains
+additional provenance attributes such as source file name and file size.
+
+
+If the file cannot be read, an empty `survey` object is returned
+and a warning is emitted.
+
+The function:
+
+- restores the serialized object,
+- validates source file information,
+- normalizes `rowid`,
+- records provenance metadata,
+- and stores object and source file sizes as attributes.
 }
 \examples{
-path <- system.file("examples", "ZA7576.rds", package = "retroharmonize")
-read_survey <- read_rds(path)
-attr(read_survey, "id")
-attr(read_survey, "filename")
-attr(read_survey, "doi")
+path <- system.file(
+  "examples",
+  "ZA7576.rds",
+  package = "retroharmonize"
+)
+
+survey_object <- read_rds(path)
+
+attr(survey_object, "id")
+attr(survey_object, "filename")
+attr(survey_object, "doi")
+
 }
 \seealso{
-Other import functions: 
-\code{\link{harmonize_survey_variables}()},
-\code{\link{pull_survey}()},
-\code{\link{read_csv}()},
-\code{\link{read_dta}()},
-\code{\link{read_spss}()},
-\code{\link{read_surveys}()}
+Other import functions:
+\code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
+\code{\link[=pull_survey]{pull_survey()}},
+\code{\link[=read_csv]{read_csv()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_spss]{read_spss()}},
+\code{\link[=read_surveys]{read_surveys()}}
 }
 \concept{import functions}
