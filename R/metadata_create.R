@@ -1,19 +1,53 @@
-#' @title Create a metadata table from several surveys
-#' @rdname metadata_create
-#' @param survey_paths Optional character vector of file paths to surveys.
-#' @param survey_list A list containing surveys of class survey.
-#' @param .f A function to import the surveys with.
-#' @family metadata functions
+#' Create metadata tables from survey datasets
+#'
+#' Create a variable-level metadata table from one or more survey
+#' datasets. Metadata are extracted either from survey objects already
+#' loaded into memory or directly from survey files.
+#'
+#' The resulting metadata table contains information about:
+#'
+#' \itemize{
+#'   \item variable names and labels,
+#'   \item storage classes,
+#'   \item value labels,
+#'   \item user-defined missing values,
+#'   \item and missing value ranges.
+#' }
+#'
+#' `metadata_create()` is a convenience wrapper around repeated
+#' [metadata_survey_create()] calls.
+#'
+#' @param survey_paths Optional character vector containing paths to
+#'   survey files.
+#'
+#' @param survey_list Optional list of survey objects of class
+#'   [survey()].
+#'
+#' @param .f Import function used to read surveys from
+#'   `survey_paths`. When `NULL`, the import function is inferred from
+#'   the file extension.
+#'
+#' @return A data frame containing variable-level survey metadata.
+#'
 #' @examples
-#' examples_dir <- system.file("examples", package = "retroharmonize")
+#' examples_dir <- system.file(
+#'   "examples",
+#'   package = "retroharmonize"
+#' )
 #'
 #' my_rds_files <- dir(examples_dir)[grepl(
-#'   ".rds",
+#'   "\\.rds$",
 #'   dir(examples_dir)
 #' )]
 #'
-#' example_surveys <- read_surveys(file.path(examples_dir, my_rds_files))
+#' example_surveys <- read_surveys(
+#'   file.path(examples_dir, my_rds_files)
+#' )
+#'
 #' metadata_create(example_surveys)
+#'
+#' @family metadata functions
+#' @seealso [metadata_survey_create()], [create_variable_catalog()]
 #' @export
 
 metadata_create <- function(survey_list = NULL,
@@ -179,21 +213,50 @@ metadata_survey_create <- function(survey) {
   }
 
   to_list_column <- function(.f = "na_values") {
-    # We use sapply because the length is to be discovered.
-
-    x <- case_when(
-      .f == "na_labels" ~ sapply(survey, na_labels), # internal function above
-      .f == "na_range" ~ sapply(survey, labelled::na_range),
-      .f == "valid_range" ~ sapply(survey, fn_valid_range), # internal function above
-      .f == "labels" ~ sapply(survey, labelled::val_labels)
-    )
-
-    x[sapply(x, is.null)] <- NA_character_
+    
+    if (.f == "na_labels") {
+      
+      x <- sapply(
+        survey,
+        na_labels
+      )
+      
+    } else if (.f == "na_range") {
+      
+      x <- sapply(
+        survey,
+        labelled::na_range
+      )
+      
+    } else if (.f == "valid_range") {
+      
+      x <- sapply(
+        survey,
+        fn_valid_range
+      )
+      
+    } else if (.f == "labels") {
+      
+      x <- sapply(
+        survey,
+        labelled::val_labels
+      )
+      
+    } else {
+      
+      stop(
+        "Unknown metadata field: ",
+        .f
+      )
+    }
+    
+    x[vapply(x, is.null, logical(1))] <- NA_character_
+    
     names(x) <- names(survey)
+    
     x
   }
-
-
+  
   range_df <- tibble::tibble(
     var_name_orig = names(survey),
     labels = rep(NA_character_, length(names(survey))),
@@ -202,11 +265,13 @@ metadata_survey_create <- function(survey) {
     na_range = rep(NA_character_, length(names(survey))),
     n_labels = rep(0, length(names(survey))),
     n_valid_labels = rep(0, length(names(survey))),
-    n_na_labels = rep(0, length(names(survey))),
+    n_na_labels = rep(0, length(names(survey)))
   )
 
   if (
-    any(vapply(lapply(survey, class), function(x) any(grepl("labelled", x)), logical(1)))
+    any(vapply(lapply(survey, class), 
+               function(x) any(grepl("labelled", x)), 
+               logical(1)))
   ) {
     range_df <- tibble::tibble(
       var_name_orig = names(survey),
@@ -221,14 +286,26 @@ metadata_survey_create <- function(survey) {
       )
     }
 
-    range_df$n_labels <- vapply(1:nrow(range_df), function(x) label_length(range_df$labels[x]), numeric(1))
-    range_df$n_valid_labels <- vapply(1:nrow(range_df), function(x) label_length(range_df$valid_labels[x]), numeric(1))
-    range_df$n_na_labels <- vapply(1:nrow(range_df), function(x) label_length(range_df$na_labels[x]), numeric(1))
+    range_df$n_labels <- vapply(
+      1:nrow(range_df), 
+      function(x) label_length(range_df$labels[x]), 
+      numeric(1))
+    range_df$n_valid_labels <- vapply(
+      1:nrow(range_df), 
+      function(x) label_length(range_df$valid_labels[x]), 
+      numeric(1))
+    range_df$n_na_labels <- vapply(
+      1:nrow(range_df), 
+      function(x) label_length(range_df$na_labels[x]), 
+      numeric(1))
   } else {
     ## Special case when there are no labelled variables present
-    return(metadata %>% left_join(range_df,
-      by = "var_name_orig"
-    ) %>% as.data.frame())
+    return(
+      metadata %>% 
+        left_join(range_df,
+                             by = "var_name_orig") %>% 
+        as.data.frame()
+    )
   }
 
   return_df <- metadata %>%
