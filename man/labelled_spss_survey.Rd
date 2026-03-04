@@ -104,7 +104,7 @@ is.labelled_spss_survey(x)
 
 \item{value}{Replacement values used when assigning names.}
 
-\item{digits}{Number of digits to use in string representation in 
+\item{digits}{Number of digits to use in string representation in
 the format method.}
 
 \item{na.rm}{a logical value indicating whether \code{NA}
@@ -144,11 +144,11 @@ The resulting object behaves like a
 
 
 Several arithmetic (statistical summary) methods operate on the
-numeric representation of labelled survey vectors, converting 
+numeric representation of labelled survey vectors, converting
 SPSS-style missing values to `NA`
 before computation.
 
-You can coerce labelled_spss_survey vectors to numeric, 
+You can coerce labelled_spss_survey vectors to numeric,
 character or factor representation.
 
 The resulting object behaves like a
@@ -161,11 +161,11 @@ The resulting object behaves like a
 
 
 Several arithmetic (statistical summary) methods operate on the
-numeric representation of labelled survey vectors, converting 
+numeric representation of labelled survey vectors, converting
 SPSS-style missing values to `NA`
 before computation.
 
-You can coerce labelled_spss_survey vectors to numeric, 
+You can coerce labelled_spss_survey vectors to numeric,
 character or factor representation.
 }
 \examples{
@@ -193,11 +193,6 @@ as_factor(x)
 \seealso{
 [haven::labelled_spss()],
 [as_factor()],
-[as_numeric()], 
-[as_character()]
-
-[haven::labelled_spss()],
-[as_factor()],
-[as_numeric()], 
+[as_numeric()],
 [as_character()]
 }

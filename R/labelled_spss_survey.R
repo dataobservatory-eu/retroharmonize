@@ -14,13 +14,13 @@
 #'
 #' @details
 #' Several arithmetic (statistical summary) methods operate on the
-#' numeric representation of labelled survey vectors, converting 
+#' numeric representation of labelled survey vectors, converting
 #' SPSS-style missing values to `NA`
 #' before computation.
-#' 
-#' You can coerce labelled_spss_survey vectors to numeric, 
+#'
+#' You can coerce labelled_spss_survey vectors to numeric,
 #' character or factor representation.
-#' 
+#'
 #' @param x A vector of values.
 #' @param labels A named vector of value labels.
 #' @param na_values A vector of values to be treated as missing.
@@ -36,7 +36,7 @@
 #' @seealso
 #' [haven::labelled_spss()],
 #' [as_factor()],
-#' [as_numeric()], 
+#' [as_numeric()],
 #' [as_character()]
 #'
 #' @importFrom labelled labelled
@@ -91,11 +91,11 @@ labelled_spss_survey <- function(
 #' @importFrom vctrs vec_is
 #' @importFrom haven labelled_spss
 #' @keywords internal
-new_labelled_spss_survey <- function(x, 
+new_labelled_spss_survey <- function(x,
                                      labels,
-                                     na_values, 
+                                     na_values,
                                      na_range,
-                                     label, 
+                                     label,
                                      id,
                                      name_orig) {
   if (!is.null(na_values) && !vctrs::vec_is(x, na_values)) {
@@ -186,13 +186,13 @@ get_labeltext <- function(x, prefix = ": ") {
 #'
 #' @details
 #' Several arithmetic (statistical summary) methods operate on the
-#' numeric representation of labelled survey vectors, converting 
+#' numeric representation of labelled survey vectors, converting
 #' SPSS-style missing values to `NA`
 #' before computation.
-#' 
-#' You can coerce labelled_spss_survey vectors to numeric, 
+#'
+#' You can coerce labelled_spss_survey vectors to numeric,
 #' character or factor representation.
-#' 
+#'
 #' @param x A vector of values.
 #' @param labels A named vector of value labels.
 #' @param na_values A vector of values to be treated as missing.
@@ -208,7 +208,7 @@ get_labeltext <- function(x, prefix = ": ") {
 #' @seealso
 #' [haven::labelled_spss()],
 #' [as_factor()],
-#' [as_numeric()], 
+#' [as_numeric()],
 #' [as_character()]
 #'
 #' @examples
@@ -258,11 +258,11 @@ labelled_spss_survey <- function(
 }
 
 #' @keywords internal
-new_labelled_spss_survey <- function(x, 
+new_labelled_spss_survey <- function(x,
                                      labels,
-                                     na_values, 
+                                     na_values,
                                      na_range,
-                                     label, 
+                                     label,
                                      id,
                                      name_orig) {
   if (!is.null(na_values) && !vctrs::vec_is(x, na_values)) {
@@ -411,8 +411,10 @@ obj_print_footer.retroharmonize_labelled_spss_survey <- function(x, ...) {
 #' @importFrom cli cat_line
 #' @importFrom utils head
 print.retroharmonize_labelled_spss_survey <- function(x, ...) {
-  cli::cat_line("<", vec_ptype_full(x), 
-                "[", vec_size(x), "]>", get_labeltext(x))
+  cli::cat_line(
+    "<", vec_ptype_full(x),
+    "[", vec_size(x), "]>", get_labeltext(x)
+  )
   cat(head(vec_data(x), 20))
   cat("\n")
   print_attributes(x)
@@ -474,7 +476,10 @@ levels.retroharmonize_labelled_spss_survey <- function(x) {
 #' @rdname labelled_spss_survey
 #' @importFrom haven format_tagged_na
 #' @export
-format.retroharmonize_labelled_spss_survey <- function(x, ..., digits = getOption("digits")) {
+format.retroharmonize_labelled_spss_survey <- function(x, 
+                                                       ..., 
+                                                       digits = getOption("digits")
+                                                       ) {
   if (is.double(x)) {
     haven::format_tagged_na(x, digits = digits)
   } else {
@@ -520,56 +525,57 @@ NULL
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_ptype2.retroharmonize_labelled_spss_survey.double <- function(x, 
-                                                                  y, 
+vec_ptype2.retroharmonize_labelled_spss_survey.double <- function(x,
+                                                                  y,
                                                                   ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_ptype2.double.retroharmonize_labelled_spss_survey <- function(x,
-                                                                  y, 
+                                                                  y,
                                                                   ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_ptype2.integer.retroharmonize_labelled_spss_survey <- function(x, 
-                                                                   y, 
+vec_ptype2.integer.retroharmonize_labelled_spss_survey <- function(x,
+                                                                   y,
                                                                    ...) {
-  double() 
-  }
+  double()
+}
 
-vec_ptype2.retroharmonize_labelled_spss_survey.integer <- function(x, 
-                                                                   y, 
+vec_ptype2.retroharmonize_labelled_spss_survey.integer <- function(x,
+                                                                   y,
                                                                    ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_cast.double.retroharmonize_labelled_spss_survey <- function(x, 
-                                                                to, 
+vec_cast.double.retroharmonize_labelled_spss_survey <- function(x,
+                                                                to,
                                                                 ...) {
-  vec_cast(vctrs::vec_data(x), to) 
-  }
+  vec_cast(vctrs::vec_data(x), to)
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_cast.integer.retroharmonize_labelled_spss_survey <- function(x,
-                                                                 to, 
+                                                                 to,
                                                                  ...) {
-  vec_cast(vctrs::vec_data(x), to) 
-  }
+  vec_cast(vctrs::vec_data(x), to)
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_cast.character.retroharmonize_labelled_spss_survey <- function(
-    x, 
-    to, 
-    ...) {
+  x,
+  to,
+  ...
+) {
   if (is.character(x)) {
     vec_cast(vctrs::vec_data(x), to, ...)
   } else {
@@ -578,22 +584,22 @@ vec_cast.character.retroharmonize_labelled_spss_survey <- function(
 }
 
 
-
 ## Prototype --------------------------------------
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
-  x, 
-  y, 
-  ..., 
-  x_arg = "", 
+  x,
+  y,
+  ...,
+  x_arg = "",
   y_arg = ""
 ) {
   # data_type <- vctrs::vec_ptype2(vec_data(x), vec_data(y), ..., x_arg = x_arg, y_arg = y_arg)
-  data_type <- vec_ptype2(vec_data(x), 
-                          vec_data(y), 
-                          x_arg = x_arg, 
-                          y_arg = y_arg)
+  data_type <- vec_ptype2(vec_data(x),
+    vec_data(y),
+    x_arg = x_arg,
+    y_arg = y_arg
+  )
 
   x_labels <- labelled::val_labels(x)
   y_labels <- labelled::val_labels(y)
@@ -743,8 +749,8 @@ vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_surv
 #' @importFrom haven is_tagged_na
 #' @export
 vec_cast.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
-  x, 
-  to, ..., 
+  x,
+  to, ...,
   x_arg = "", to_arg = ""
 ) {
   # out_data <- vec_cast(vec_data(x), vec_data(to), ..., x_arg = x_arg, to_arg = to_arg)
@@ -817,13 +823,17 @@ vec_cast.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey
 print_attributes <- function(x, full = TRUE) {
   na_values <- attr(x, "na_values")
   if (!is.null(na_values)) {
-    cli::cat_line("Missing values: ", 
-                     paste(na_values, collapse = ", "))
+    cli::cat_line(
+      "Missing values: ",
+      paste(na_values, collapse = ", ")
+    )
   }
   na_range <- attr(x, "na_range")
   if (!is.null(na_range)) {
-    cli::cat_line("Missing range:  [", 
-                     paste(na_range, collapse = ", "), "]")
+    cli::cat_line(
+      "Missing range:  [",
+      paste(na_range, collapse = ", "), "]"
+    )
   }
 
   if (full == FALSE) invisible(x)
@@ -856,8 +866,10 @@ print_attributes <- function(x, full = TRUE) {
 #' @export
 #' @importFrom cli cat_line
 vec_ptype_full.retroharmonize_labelled_spss_survey <- function(x, ...) {
-  paste0("labelled_spss_survey<", 
-         vctrs::vec_ptype_full(vctrs::vec_data(x)), ">")
+  paste0(
+    "labelled_spss_survey<",
+    vctrs::vec_ptype_full(vctrs::vec_data(x)), ">"
+  )
   cli::cat_line("Survey ID: ", attr(x, "id"))
 }
 
@@ -951,12 +963,13 @@ levels.retroharmonize_labelled_spss_survey <- function(x) {
 
 #' @rdname labelled_spss_survey
 #' @importFrom haven format_tagged_na
-#' @param digits Number of digits to use in string representation in 
+#' @param digits Number of digits to use in string representation in
 #' the format method.
 #' @export
-format.retroharmonize_labelled_spss_survey <- function(x, 
-                                                       ..., 
-                                                       digits = getOption("digits")) {
+format.retroharmonize_labelled_spss_survey <- function(x,
+                                                       ...,
+                                                       digits = getOption("digits")
+                                                       ) {
   if (is.double(x)) {
     haven::format_tagged_na(x, digits = digits)
   } else {
@@ -1002,56 +1015,57 @@ NULL
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_ptype2.retroharmonize_labelled_spss_survey.double <- function(x, 
-                                                                  y, 
+vec_ptype2.retroharmonize_labelled_spss_survey.double <- function(x,
+                                                                  y,
                                                                   ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_ptype2.double.retroharmonize_labelled_spss_survey <- function(x,
-                                                                  y, 
+                                                                  y,
                                                                   ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_ptype2.integer.retroharmonize_labelled_spss_survey <- function(x, 
-                                                                   y, 
+vec_ptype2.integer.retroharmonize_labelled_spss_survey <- function(x,
+                                                                   y,
                                                                    ...) {
-  double() 
-  }
+  double()
+}
 
-vec_ptype2.retroharmonize_labelled_spss_survey.integer <- function(x, 
-                                                                   y, 
+vec_ptype2.retroharmonize_labelled_spss_survey.integer <- function(x,
+                                                                   y,
                                                                    ...) {
-  double() 
-  }
+  double()
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
-vec_cast.double.retroharmonize_labelled_spss_survey <- function(x, 
-                                                                to, 
+vec_cast.double.retroharmonize_labelled_spss_survey <- function(x,
+                                                                to,
                                                                 ...) {
-  vec_cast(vctrs::vec_data(x), to) 
-  }
+  vec_cast(vctrs::vec_data(x), to)
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_cast.integer.retroharmonize_labelled_spss_survey <- function(x,
-                                                                 to, 
+                                                                 to,
                                                                  ...) {
-  vec_cast(vctrs::vec_data(x), to) 
-  }
+  vec_cast(vctrs::vec_data(x), to)
+}
 
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_cast.character.retroharmonize_labelled_spss_survey <- function(
-    x, 
-    to, 
-    ...) {
+  x,
+  to,
+  ...
+) {
   if (is.character(x)) {
     vec_cast(vctrs::vec_data(x), to, ...)
   } else {
@@ -1060,22 +1074,22 @@ vec_cast.character.retroharmonize_labelled_spss_survey <- function(
 }
 
 
-
 ## Prototype --------------------------------------
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
-  x, 
-  y, 
-  ..., 
-  x_arg = "", 
+  x,
+  y,
+  ...,
+  x_arg = "",
   y_arg = ""
 ) {
   # data_type <- vctrs::vec_ptype2(vec_data(x), vec_data(y), ..., x_arg = x_arg, y_arg = y_arg)
-  data_type <- vec_ptype2(vec_data(x), 
-                          vec_data(y), 
-                          x_arg = x_arg, 
-                          y_arg = y_arg)
+  data_type <- vec_ptype2(vec_data(x),
+    vec_data(y),
+    x_arg = x_arg,
+    y_arg = y_arg
+  )
 
   x_labels <- labelled::val_labels(x)
   y_labels <- labelled::val_labels(y)
@@ -1225,8 +1239,8 @@ vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_surv
 #' @importFrom haven is_tagged_na
 #' @export
 vec_cast.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
-  x, 
-  to, ..., 
+  x,
+  to, ...,
   x_arg = "", to_arg = ""
 ) {
   # out_data <- vec_cast(vec_data(x), vec_data(to), ..., x_arg = x_arg, to_arg = to_arg)
