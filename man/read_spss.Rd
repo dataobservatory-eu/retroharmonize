@@ -23,10 +23,10 @@ to \code{TRUE}.}
 \code{dataset::\link[dataset:dublincore]{dublincore}} or
 \code{dataset::\link[dataset:datacite]{datacite}}.}
 
-\item{id}{An identifier of the tibble, if omitted, defaults to the
-file name without its extension.}
+\item{id}{Optional survey identifier. Defaults to the file name
+without extension.}
 
-\item{doi}{An optional document object identifier.}
+\item{doi}{Optional DOI identifier for the survey.}
 
 \item{.name_repair}{Defaults to \code{"unique"} See
 \code{tibble::\link[tibble:as_tibble]{as_tibble}} for details.}
@@ -63,12 +63,12 @@ haven::read_sav(tmp)
 }
 }
 \seealso{
-Other import functions: 
-\code{\link{harmonize_survey_variables}()},
-\code{\link{pull_survey}()},
-\code{\link{read_csv}()},
-\code{\link{read_dta}()},
-\code{\link{read_rds}()},
-\code{\link{read_surveys}()}
+Other import functions:
+\code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
+\code{\link[=pull_survey]{pull_survey()}},
+\code{\link[=read_csv]{read_csv()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_rds]{read_rds()}},
+\code{\link[=read_surveys]{read_surveys()}}
 }
 \concept{import functions}

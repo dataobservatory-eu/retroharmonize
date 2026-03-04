@@ -1,50 +1,81 @@
-#' @title Read SPSS (`.sav`, `.zsav`, `.por`) files. Write `.sav` and `.zsav` files.
+#' Read SPSS survey files
 #'
-#' @description This is a wrapper around \code{haven::\link[haven:read_spss]{read_spss}}
-#' with some exception handling.
+#' Import SPSS survey files in `.sav`, `.zsav`, or `.por` format and
+#' convert them into harmonized `survey` objects with preserved metadata,
+#' labelled variables, and provenance information.
 #'
-#' @details `read_sav()` reads both `.sav` and `.zsav` files; `write_sav()` creates
-#' `.zsav` files when `compress = TRUE`. `read_por()` reads `.por` files.
-#' `read_spss()` uses either `read_por()` or `read_sav()` based on the
-#' file extension.
+#' This function wraps [haven::read_spss()] and adds:
 #'
-#' When the SPSS file has columns which are of class labelled, but have no labels,
-#' they are read as numeric or character vectors.
+#' - error handling,
+#' - harmonized survey metadata,
+#' - `rowid` creation and normalization,
+#' - preservation of variable labels,
+#' - conversion of labelled SPSS vectors,
+#' - handling of malformed labelled variables,
+#' - and provenance metadata.
 #'
-#' @param file An SPSS file.
-#' @param user_na Should user-defined na_values be imported? Defaults
-#' to \code{TRUE}.
-#' @param dataset_bibentry A bibliographic entry created with
-#' \code{dataset::\link[dataset:dublincore]{dublincore}} or
-#' \code{dataset::\link[dataset:datacite]{datacite}}.
-#' @param .name_repair Defaults to \code{"unique"} See
-#' \code{tibble::\link[tibble:as_tibble]{as_tibble}} for details.
-#' @inheritParams read_rds
-#' @importFrom haven read_spss read_sav write_sav is.labelled
-#' @importFrom assertthat assert_that
-#' @importFrom tibble rowid_to_column as_tibble
-#' @importFrom fs path_ext_remove path_file is_file
-#' @importFrom labelled var_label
-#' @importFrom dplyr bind_cols select_if mutate_all select all_of
-#' @importFrom purrr safely
-#' @importFrom utils object.size
-#' @return A tibble:
+#' @details
+#' `read_sav()` reads both `.sav` and `.zsav` files.
+#' `read_por()` reads portable SPSS `.por` files.
+#' `read_spss()` automatically dispatches to the appropriate importer
+#' based on file extension.
 #'
-#'   Variable labels are stored in the "label" attribute of each variable.
-#'   It is not printed on the console, but the RStudio viewer will show it.
+#' Variables that inherit from `haven_labelled` but do not contain
+#' valid label definitions are converted to standard numeric or
+#' character vectors.
 #'
-#'   `write_sav()` returns the input `data` invisibly.
-#' @name read_spss
+#' If a file cannot be imported, the function returns an empty
+#' `survey` object and emits a warning.
+#'
+#' @param file Path to an SPSS survey file.
+#' @param user_na Logical. Should user-defined missing values be imported?
+#'   Defaults to `TRUE`.
+#' @param dataset_bibentry Optional bibliographic metadata created with
+#'   [dataset::dublincore()] or [dataset::datacite()].
+#' @param id Optional survey identifier. Defaults to the file name
+#'   without extension.
+#' @param doi Optional DOI identifier.
+#' @param .name_repair Strategy for repairing invalid or duplicated
+#'   column names. Passed to [haven::read_spss()].
+#'
+#' @return
+#' A `survey` object inheriting from `data.frame` and `tbl_df`.
+#'
+#' Variable labels are stored in the `"label"` attribute of each variable.
+#'
+#' Additional provenance metadata are stored as attributes, including:
+#'
+#' - `"id"`
+#' - `"doi"`
+#' - `"object_size"`
+#' - `"source_file_size"`
+#'
 #' @family import functions
+#'
 #' @examples
 #' \donttest{
-#' path <- system.file("examples", "iris.sav", package = "haven")
-#' haven::read_sav(path)
+#' path <- system.file(
+#'   "examples",
+#'   "iris.sav",
+#'   package = "haven"
+#' )
 #'
-#' tmp <- tempfile(fileext = ".sav")
-#' haven::write_sav(mtcars, tmp)
-#' haven::read_sav(tmp)
+#' survey_object <- read_spss(path)
+#'
+#' attr(survey_object, "id")
+#' attr(survey_object, "filename")
 #' }
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr across bind_cols mutate select
+#' @importFrom fs path_ext_remove path_file
+#' @importFrom haven read_spss
+#' @importFrom labelled var_label var_label<-
+#' @importFrom purrr safely
+#' @importFrom tibble as_tibble rowid_to_column
+#' @importFrom tidyselect all_of
+#' @importFrom utils object.size
+#'
 #' @export
 
 read_spss <- function(file,
@@ -80,7 +111,7 @@ read_spss <- function(file,
   }
 
   tmp <- tmp %>%
-    tibble::rowid_to_column()
+    tibble::rowid_to_column(var = "rowid")
 
   all_vars <- names(tmp)
 
@@ -94,10 +125,8 @@ read_spss <- function(file,
     id <- path_ext_remove(filename)
   }
 
-  if (is.null(doi)) {
-    if ("doi" %in% names(tmp)) {
-      doi <- tmp$doi[1]
-    }
+  if (is.null(doi) && "doi" %in% names(tmp)) {
+    doi <- tmp$doi[1]
   }
 
   tmp$rowid <- paste0(id, "_", tmp$rowid)
@@ -109,12 +138,29 @@ read_spss <- function(file,
 
   label_orig <- lapply(tmp, labelled::var_label)
 
-  converted <- tmp[!vapply(tmp, function(x) is.null(attr(x, "labels")), logical(1))]
-  converted <- converted[!vapply(converted, function(x) length(attr(x, "labels")) > 0, logical(1))]
+  converted <- tmp[
+    !vapply(
+      tmp,
+      function(x) is.null(attr(x, "labels")),
+      logical(1)
+    )
+  ]
 
+  converted <- converted[
+    vapply(
+      converted,
+      function(x) length(attr(x, "labels")) > 0,
+      logical(1)
+    )
+  ]
 
   converted <- converted %>%
-    mutate_all(as_labelled_spss_survey, id)
+    mutate(
+      across(
+        everything(),
+        ~ as_labelled_spss_survey(.x, id)
+      )
+    )
 
   not_converted <- tmp %>%
     select(-all_of(names(converted)))
@@ -137,7 +183,12 @@ read_spss <- function(file,
   }
 
   not_converted <- not_converted %>%
-    mutate_all(convert_fake_labelled)
+    mutate(
+      across(
+        everything(),
+        convert_fake_labelled
+      )
+    )
 
   if (ncol(converted) == 0) {
     return_df <- not_converted
@@ -150,18 +201,25 @@ read_spss <- function(file,
   return_df <- return_df %>%
     select(all_of(all_vars))
 
-  original_labels <- c(
-    lapply(label_orig, function(x) ifelse(is.null(x), "", x))
+  original_labels <- lapply(
+    label_orig,
+    function(x) {
+      if (is.null(x)) "" else x
+    }
   )
 
   for (i in seq_along(return_df)) {
-    ## only labelled classes will have a label
-    labelled::var_label(return_df[, i]) <- unlist(original_labels)[i]
+    # Only labelled classes will have a label
+    labelled::var_label(return_df[[i]]) <- original_labels[[i]]
   }
 
-  return_survey <- survey_df(return_df,
+  persistent_id <- if (!is.null(doi)) doi else id
+
+  return_survey <- survey_df(
+    return_df,
     dataset_bibentry = dataset_bibentry,
-    filename = filename, identifier = doi
+    filename = filename,
+    identifier = persistent_id
   )
 
   object_size <- as.numeric(object.size(as_tibble(return_df)))
