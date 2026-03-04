@@ -2,48 +2,64 @@
 % Please edit documentation in R/merge_surveys.R
 \name{merge_surveys}
 \alias{merge_surveys}
-\alias{merge_waves}
-\title{Merge surveys}
+\title{Merge and harmonize surveys}
 \usage{
 merge_surveys(survey_list, var_harmonization)
-
-merge_waves(waves, var_harmonization)
 }
 \arguments{
-\item{survey_list}{A list of surveys.}
+\item{survey_list}{A list of survey objects.}
 
-\item{var_harmonization}{A metadata table describing how variables should be harmonized.
-It must contain at least the columns
-\code{filename}, \code{var_name_orig}, \code{var_name_target},
-and \code{var_label}.}
+\item{var_harmonization}{A metadata table describing the
+  harmonization rules. The table must contain at least:
 
-\item{waves}{Deprecated.}
+  - `filename`
+  - `var_name_orig`
+  - `var_name_target`
+  - `var_label`}
 }
 \value{
-A list of surveys with harmonized variable names and labels.
+A list of harmonized survey objects with standardized variable names
+and variable labels.
 }
 \description{
-Merge a list of surveys into a list with harmonized variable names,
-variable labels, and survey identifiers.
+`merge_surveys()` applies a harmonization specification to a list
+of survey objects and returns harmonized survey datasets with
+aligned variable names and metadata.
 }
 \details{
-Prior to version 0.2.0 this function was called \code{merge_waves()},
-reflecting the terminology used in Eurobarometer surveys.
+Harmonize variable names, labels, and identifiers across multiple
+surveys using a metadata crosswalk table.
+
+
+Prior to version 0.2.0 this function was called `merge_waves()`,
+reflecting terminology commonly used in Eurobarometer surveys.
+
+The harmonization table supplied in `var_harmonization`
+typically originates from [metadata_create()] and contains
+mappings between original and harmonized variable names.
 }
 \examples{
 \donttest{
-examples_dir <- system.file("examples", package = "retroharmonize")
-survey_files <- dir(examples_dir, pattern = "\\\\.rds$", full.names = TRUE)
 
-example_surveys <- read_surveys(
-  survey_files,
-  save_to_rds = FALSE
+examples_dir <- system.file(
+  "examples",
+  package = "retroharmonize"
 )
 
-# Create metadata from surveys
-metadata <- metadata_create(survey_list = example_surveys)
+survey_files <- dir(
+  examples_dir,
+  pattern = "\\\\.rds$",
+  full.names = TRUE
+)
 
-# Select and harmonize a subset of variables
+example_surveys <- read_surveys(
+  survey_files
+)
+
+metadata <- metadata_create(
+  survey_list = example_surveys
+)
+
 to_harmonize <- metadata \%>\%
   dplyr::filter(
     var_name_orig \%in\% c("rowid", "w1") |
@@ -53,7 +69,8 @@ to_harmonize <- metadata \%>\%
     var_label = var_label_normalize(var_label_orig),
     var_name_target = val_label_normalize(var_label),
     var_name_target = ifelse(
-      .data$var_name_orig \%in\% c("rowid", "w1", "wex"),
+      .data$var_name_orig \%in\%
+        c("rowid", "w1", "wex"),
       .data$var_name_orig,
       .data$var_name_target
     )
@@ -69,6 +86,9 @@ merged_surveys[[1]]
 
 }
 \seealso{
-metadata_create
+[metadata_create()]
+
+Other survey harmonization functions:
+\code{\link[=merge_waves]{merge_waves()}}
 }
 \concept{survey harmonization functions}
