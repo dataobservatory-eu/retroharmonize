@@ -1,36 +1,62 @@
-#' @title Read Stata DTA files (`.dta`) files
+#' Read a Stata `.dta` survey file
 #'
-#' @description This is a wrapper around \code{haven::\link[haven:read_dta]{read_dta}}
-#' with some exception handling.
+#' Import a survey dataset stored in Stata `.dta` format and convert it
+#' into a `survey` object with harmonized metadata and labelled variables.
 #'
-#' @details `read_dta()` reads both `.dta`  files.
+#' This function wraps [haven::read_dta()] and adds:
 #'
-#' The funcion is not yet tested.
+#' - error handling,
+#' - survey metadata creation,
+#' - `rowid` normalization,
+#' - preservation of variable labels,
+#' - conversion of labelled variables,
+#' - and provenance metadata.
 #'
-#' @param file A STATA file.
-#' @param .name_repair Defaults to \code{"unique"} See
-#' \code{tibble::\link[tibble:as_tibble]{as_tibble}} for details.
-#' @inheritParams read_rds
-#' @importFrom haven read_dta is.labelled
-#' @importFrom tibble rowid_to_column as_tibble
-#' @importFrom fs path_ext_remove path_file is_file
-#' @importFrom labelled var_label
-#' @importFrom dplyr bind_cols select_if mutate_all select
-#' @importFrom tidyselect all_of
-#' @importFrom purrr safely
-#' @return A tibble.
+#' @param file Path to a Stata `.dta` file.
+#' @param id Optional survey identifier. Defaults to the file name
+#'   without extension.
+#' @param doi Optional DOI identifier for the survey.
+#' @param .name_repair Strategy for repairing invalid or duplicated
+#'   column names. Passed to [haven::read_dta()].
 #'
-#'   Variable labels are stored in the "label" attribute of each variable.
-#'   It is not printed on the console, but the RStudio viewer will show it.
+#' @return A `survey` object inheriting from `data.frame` and `tbl_df`.
 #'
-#'   `write_sav()` returns the input `data` invisibly.
-#' @name read_dta
+#' @details
+#' Variable labels are preserved using the `"label"` attribute.
+#'
+#' Labelled variables are converted to harmonized labelled survey vectors
+#' where possible. Variables that inherit from `haven_labelled` but do not
+#' contain valid label definitions are converted back to standard vectors.
+#'
+#' If the file cannot be read, the function returns an empty `survey`
+#' object and emits a warning.
+#'
 #' @family import functions
+#'
 #' @examples
 #' \donttest{
-#' path <- system.file("examples", "iris.dta", package = "haven")
-#' read_dta(path)
+#' path <- system.file(
+#'   "examples",
+#'   "iris.dta",
+#'   package = "haven"
+#' )
+#'
+#' survey_object <- read_dta(path)
+#'
+#' attr(survey_object, "id")
+#' attr(survey_object, "filename")
 #' }
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr bind_cols mutate_all select
+#' @importFrom fs path_ext_remove path_file
+#' @importFrom haven read_dta
+#' @importFrom labelled var_label var_label<-
+#' @importFrom purrr safely
+#' @importFrom tibble as_tibble rowid_to_column
+#' @importFrom tidyselect all_of
+#' @importFrom utils object.size
+#'
 #' @export
 
 read_dta <- function(file,
@@ -56,7 +82,7 @@ read_dta <- function(file,
   }
 
   tmp <- tmp %>%
-    tibble::rowid_to_column()
+    tibble::rowid_to_column(var = "rowid")
 
   all_vars <- names(tmp)
 
@@ -70,10 +96,8 @@ read_dta <- function(file,
     id <- fs::path_ext_remove(filename)
   }
 
-  if (is.null(doi)) {
-    if ("doi" %in% names(tmp)) {
-      doi <- tmp$doi[1]
-    }
+  if (is.null(doi) && "doi" %in% names(tmp)) {
+    doi <- tmp$doi[1]
   }
 
   tmp$rowid <- paste0(id, "_", tmp$rowid)
@@ -85,9 +109,15 @@ read_dta <- function(file,
     tmp$rowid
   ) <- paste0("Unique identifier in ", id)
 
-  converted <- tmp[!vapply(tmp, function(x) is.null(attr(x, "labels")), logical(1))]
-  converted <- converted[!vapply(converted, function(x) length(attr(x, "labels")) > 0, logical(1))]
-
+  converted <- tmp[!vapply(tmp, 
+                           function(x) is.null(attr(x, "labels")), 
+                           logical(1))]
+  
+  converted <- converted[
+    vapply(converted,
+           function(x) length(attr(x, "labels")) > 0,
+           logical(1))
+  ]
 
   converted <- converted %>%
     mutate_all(as_labelled_spss_survey, id)
@@ -113,7 +143,12 @@ read_dta <- function(file,
   }
 
   not_converted <- not_converted %>%
-    mutate_all(convert_fake_labelled)
+    mutate(
+      across(
+        everything(),
+        convert_fake_labelled
+      )
+    )
 
   if (ncol(converted) == 0) {
     return_df <- not_converted
@@ -126,23 +161,26 @@ read_dta <- function(file,
   return_df <- return_df %>%
     select(all_of(all_vars))
 
-  names(return_df)
 
   labelling_orig <- names(label_orig)
   labelling_orig[as.numeric(which(vapply(label_orig, is.null, logical(1))))] <- ""
-  labelling_orig
-
-  original_labels <- c(
-    list(rowid = "Unique ID"),
-    lapply(label_orig, function(x) ifelse(is.null(x), "", x))
+  
+  original_labels <- lapply(
+    label_orig,
+    function(x) {
+      if (is.null(x)) "" else x
+    }
   )
 
   for (i in seq_along(return_df)) {
-    ## only labellled classes will have a label
-    labelled::var_label(return_df[, 1]) <- unlist(original_labels)[i]
+    # Only labelled classes will have a label
+    labelled::var_label(return_df[[i]]) <- original_labels[[i]]
   }
 
-  return_survey <- survey(return_df, id = id, filename = filename, doi = doi)
+  return_survey <- survey(return_df, 
+                          id = id, 
+                          filename = filename, 
+                          doi = doi)
 
   object_size <- as.numeric(object.size(as_tibble(return_df)))
   attr(return_survey, "object_size") <- object_size
