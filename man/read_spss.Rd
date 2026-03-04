@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_spss.R
 \name{read_spss}
 \alias{read_spss}
-\title{Read SPSS (`.sav`, `.zsav`, `.por`) files. Write `.sav` and `.zsav` files.}
+\title{Read SPSS survey files}
 \usage{
 read_spss(
   file,
@@ -14,53 +14,77 @@ read_spss(
 )
 }
 \arguments{
-\item{file}{An SPSS file.}
+\item{file}{Path to an SPSS survey file.}
 
-\item{user_na}{Should user-defined na_values be imported? Defaults
-to \code{TRUE}.}
+\item{user_na}{Logical. Should user-defined missing values be imported?
+Defaults to `TRUE`.}
 
-\item{dataset_bibentry}{A bibliographic entry created with
-\code{dataset::\link[dataset:dublincore]{dublincore}} or
-\code{dataset::\link[dataset:datacite]{datacite}}.}
+\item{dataset_bibentry}{Optional bibliographic metadata created with
+[dataset::dublincore()] or [dataset::datacite()].}
 
 \item{id}{Optional survey identifier. Defaults to the file name
 without extension.}
 
-\item{doi}{Optional DOI identifier for the survey.}
+\item{doi}{Optional DOI identifier.}
 
-\item{.name_repair}{Defaults to \code{"unique"} See
-\code{tibble::\link[tibble:as_tibble]{as_tibble}} for details.}
+\item{.name_repair}{Strategy for repairing invalid or duplicated
+column names. Passed to [haven::read_spss()].}
 }
 \value{
-A tibble:
+A `survey` object inheriting from `data.frame` and `tbl_df`.
 
-  Variable labels are stored in the "label" attribute of each variable.
-  It is not printed on the console, but the RStudio viewer will show it.
+Variable labels are stored in the `"label"` attribute of each variable.
 
-  `write_sav()` returns the input `data` invisibly.
+Additional provenance metadata are stored as attributes, including:
+
+- `"id"`
+- `"doi"`
+- `"object_size"`
+- `"source_file_size"`
 }
 \description{
-This is a wrapper around \code{haven::\link[haven:read_spss]{read_spss}}
-with some exception handling.
+Import SPSS survey files in `.sav`, `.zsav`, or `.por` format and
+convert them into harmonized `survey` objects with preserved metadata,
+labelled variables, and provenance information.
 }
 \details{
-`read_sav()` reads both `.sav` and `.zsav` files; `write_sav()` creates
-`.zsav` files when `compress = TRUE`. `read_por()` reads `.por` files.
-`read_spss()` uses either `read_por()` or `read_sav()` based on the
-file extension.
+This function wraps [haven::read_spss()] and adds:
 
-When the SPSS file has columns which are of class labelled, but have no labels,
-they are read as numeric or character vectors.
+- error handling,
+- harmonized survey metadata,
+- `rowid` creation and normalization,
+- preservation of variable labels,
+- conversion of labelled SPSS vectors,
+- handling of malformed labelled variables,
+- and provenance metadata.
+
+
+`read_sav()` reads both `.sav` and `.zsav` files.
+`read_por()` reads portable SPSS `.por` files.
+`read_spss()` automatically dispatches to the appropriate importer
+based on file extension.
+
+Variables that inherit from `haven_labelled` but do not contain
+valid label definitions are converted to standard numeric or
+character vectors.
+
+If a file cannot be imported, the function returns an empty
+`survey` object and emits a warning.
 }
 \examples{
 \donttest{
-path <- system.file("examples", "iris.sav", package = "haven")
-haven::read_sav(path)
+path <- system.file(
+  "examples",
+  "iris.sav",
+  package = "haven"
+)
 
-tmp <- tempfile(fileext = ".sav")
-haven::write_sav(mtcars, tmp)
-haven::read_sav(tmp)
+survey_object <- read_spss(path)
+
+attr(survey_object, "id")
+attr(survey_object, "filename")
 }
+
 }
 \seealso{
 Other import functions:

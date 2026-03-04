@@ -2,29 +2,42 @@
 % Please edit documentation in R/pull_survey.R
 \name{pull_survey}
 \alias{pull_survey}
-\title{Pull a survey from a survey list}
+\title{Retrieve a survey from a survey list}
 \usage{
 pull_survey(survey_list, id = NULL, filename = NULL)
 }
 \arguments{
-\item{survey_list}{A list of surveys}
+\item{survey_list}{A list of `survey` objects.}
 
-\item{id}{The id of the requested survey. If \code{NULL} use
-\code{filename}}
+\item{id}{Optional survey identifier stored in the `"id"` attribute.}
 
-\item{filename}{The filename of the requested survey.}
+\item{filename}{Optional source file name stored in the `"filename"`
+attribute.}
 }
 \value{
-A single survey identified by \code{id} or \code{filename}.
+A single `survey` object.
 }
 \description{
-Pull a survey by survey code or id.
+Extract a single survey object from a list of surveys using either
+its survey identifier or source file name.
+}
+\details{
+Either `id` or `filename` must be supplied.
+
+The function throws an error if:
+
+- neither identifier is provided,
+- the requested survey is not found,
+- or multiple surveys match the query.
 }
 \examples{
-examples_dir <- system.file("examples", package = "retroharmonize")
+examples_dir <- system.file(
+  "examples",
+  package = "retroharmonize"
+)
 
 my_rds_files <- dir(examples_dir)[grepl(
-  ".rds",
+  "\\\\.rds$",
   dir(examples_dir)
 )]
 
@@ -32,15 +45,19 @@ example_surveys <- read_surveys(
   file.path(examples_dir, my_rds_files)
 )
 
-pull_survey(example_surveys, id = "ZA5913")
+pull_survey(
+  example_surveys,
+  id = "ZA5913"
+)
+
 }
 \seealso{
-Other import functions: 
-\code{\link{harmonize_survey_variables}()},
-\code{\link{read_csv}()},
-\code{\link{read_dta}()},
-\code{\link{read_rds}()},
-\code{\link{read_spss}()},
-\code{\link{read_surveys}()}
+Other import functions:
+\code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
+\code{\link[=read_csv]{read_csv()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_rds]{read_rds()}},
+\code{\link[=read_spss]{read_spss()}},
+\code{\link[=read_surveys]{read_surveys()}}
 }
 \concept{import functions}

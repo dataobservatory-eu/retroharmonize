@@ -2,43 +2,62 @@
 % Please edit documentation in R/read_dta.R
 \name{read_dta}
 \alias{read_dta}
-\title{Read Stata DTA files (`.dta`) files}
+\title{Read a Stata `.dta` survey file}
 \usage{
 read_dta(file, id = NULL, doi = NULL, .name_repair = "unique")
 }
 \arguments{
-\item{file}{A STATA file.}
+\item{file}{Path to a Stata `.dta` file.}
 
 \item{id}{Optional survey identifier. Defaults to the file name
 without extension.}
 
 \item{doi}{Optional DOI identifier for the survey.}
 
-\item{.name_repair}{Defaults to \code{"unique"} See
-\code{tibble::\link[tibble:as_tibble]{as_tibble}} for details.}
+\item{.name_repair}{Strategy for repairing invalid or duplicated
+column names. Passed to [haven::read_dta()].}
 }
 \value{
-A tibble.
-
-  Variable labels are stored in the "label" attribute of each variable.
-  It is not printed on the console, but the RStudio viewer will show it.
-
-  `write_sav()` returns the input `data` invisibly.
+A `survey` object inheriting from `data.frame` and `tbl_df`.
 }
 \description{
-This is a wrapper around \code{haven::\link[haven:read_dta]{read_dta}}
-with some exception handling.
+Import a survey dataset stored in Stata `.dta` format and convert it
+into a `survey` object with harmonized metadata and labelled variables.
 }
 \details{
-`read_dta()` reads both `.dta`  files.
+This function wraps [haven::read_dta()] and adds:
 
-The funcion is not yet tested.
+- error handling,
+- survey metadata creation,
+- `rowid` normalization,
+- preservation of variable labels,
+- conversion of labelled variables,
+- and provenance metadata.
+
+
+Variable labels are preserved using the `"label"` attribute.
+
+Labelled variables are converted to harmonized labelled survey vectors
+where possible. Variables that inherit from `haven_labelled` but do not
+contain valid label definitions are converted back to standard vectors.
+
+If the file cannot be read, the function returns an empty `survey`
+object and emits a warning.
 }
 \examples{
 \donttest{
-path <- system.file("examples", "iris.dta", package = "haven")
-read_dta(path)
+path <- system.file(
+  "examples",
+  "iris.dta",
+  package = "haven"
+)
+
+survey_object <- read_dta(path)
+
+attr(survey_object, "id")
+attr(survey_object, "filename")
 }
+
 }
 \seealso{
 Other import functions:
