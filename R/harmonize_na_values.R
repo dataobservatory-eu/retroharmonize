@@ -60,7 +60,7 @@ harmonize_na_values <- function(df) {
       TRUE ~ paste0("<missing>_", h_missing_value_labels)
     )
 
-    for (m in length(missing_value_labels)) {
+    for (m in seq_along(missing_value_labels)) {
       change_label <- which(names(these_labels) == names(missing_values[m]))
       names(these_labels)[change_label] <- h_missing_value_labels[m]
     }
