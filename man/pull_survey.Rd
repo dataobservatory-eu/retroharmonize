@@ -9,25 +9,33 @@ pull_survey(survey_list, id = NULL, filename = NULL)
 \arguments{
 \item{survey_list}{A list of `survey` objects.}
 
-\item{id}{Optional survey identifier stored in the `"id"` attribute.}
+\item{id}{Optional survey identifier.}
 
-\item{filename}{Optional source file name stored in the `"filename"`
-attribute.}
+\item{filename}{Optional source file name.}
 }
 \value{
 A single `survey` object.
 }
 \description{
-Extract a single survey object from a list of surveys using either
-its survey identifier or source file name.
+`pull_survey()` retrieves a survey object from a list created with
+[read_surveys()].
+
+Surveys can be selected using:
+
+- the survey identifier stored in the `"id"` attribute, or
+- the original source file name stored in the `"filename"` attribute.
 }
 \details{
+Extract a single `survey` object from a list of surveys using either
+its survey identifier or source file name.
+
+
 Either `id` or `filename` must be supplied.
 
 The function throws an error if:
 
-- neither identifier is provided,
-- the requested survey is not found,
+- neither argument is provided;
+- the requested survey cannot be found;
 - or multiple surveys match the query.
 }
 \examples{
@@ -36,13 +44,13 @@ examples_dir <- system.file(
   package = "retroharmonize"
 )
 
-my_rds_files <- dir(examples_dir)[grepl(
-  "\\\\.rds$",
-  dir(examples_dir)
-)]
+survey_files <- dir(
+  examples_dir,
+  pattern = "\\\\.rds$"
+)
 
 example_surveys <- read_surveys(
-  file.path(examples_dir, my_rds_files)
+  file.path(examples_dir, survey_files)
 )
 
 pull_survey(
@@ -52,6 +60,8 @@ pull_survey(
 
 }
 \seealso{
+[read_surveys()]
+
 Other import functions:
 \code{\link[=harmonize_survey_variables]{harmonize_survey_variables()}},
 \code{\link[=read_csv]{read_csv()}},

@@ -1,13 +1,143 @@
-examples_dir <- system.file("examples", package = "retroharmonize")
+test_that("pull_survey() retrieves surveys by id", {
+  
+  examples_dir <- system.file(
+    "examples",
+    package = "retroharmonize"
+  )
+  
+  survey_files <- dir(
+    examples_dir,
+    pattern = "\\.rds$"
+  )
+  
+  example_surveys <- read_surveys(
+    file.path(examples_dir, survey_files)
+  )
+  
+  result <- pull_survey(
+    example_surveys,
+    id = "ZA5913"
+  )
+  
+  expect_true(
+    inherits(result, "survey")
+  )
+  
+  expect_equal(
+    nrow(result),
+    35
+  )
+  
+  expect_equal(
+    attr(result, "id"),
+    "ZA5913"
+  )
+})
 
-my_rds_files <- dir(examples_dir)[grepl(
-  ".rds",
-  dir(examples_dir)
-)]
+test_that("pull_survey() retrieves surveys by filename", {
+  
+  examples_dir <- system.file(
+    "examples",
+    package = "retroharmonize"
+  )
+  
+  survey_files <- dir(
+    examples_dir,
+    pattern = "\\.rds$"
+  )
+  
+  example_surveys <- read_surveys(
+    file.path(examples_dir, survey_files)
+  )
+  
+  result <- pull_survey(
+    example_surveys,
+    filename = "ZA5913.rds"
+  )
+  
+  expect_true(
+    inherits(result, "survey")
+  )
+  
+  expect_equal(
+    nrow(result),
+    35
+  )
+  
+  expect_equal(
+    attr(result, "filename"),
+    "ZA5913.rds"
+  )
+})
 
-example_surveys <- read_surveys(file.path(examples_dir, my_rds_files))
+test_that("pull_survey() errors when neither id nor filename is supplied", {
+  
+  examples_dir <- system.file(
+    "examples",
+    package = "retroharmonize"
+  )
+  
+  survey_files <- dir(
+    examples_dir,
+    pattern = "\\.rds$"
+  )
+  
+  example_surveys <- read_surveys(
+    file.path(examples_dir, survey_files)
+  )
+  
+  expect_error(
+    pull_survey(example_surveys),
+    "Either the id or the filename must be given"
+  )
+})
 
-test_that("pulling works", {
-  expect_equal(nrow(pull_survey(example_surveys, id = "ZA5913")), 35)
-  expect_equal(nrow(pull_survey(example_surveys, filename = "ZA5913.rds")), 35)
+test_that("pull_survey() errors when id is not found", {
+  
+  examples_dir <- system.file(
+    "examples",
+    package = "retroharmonize"
+  )
+  
+  survey_files <- dir(
+    examples_dir,
+    pattern = "\\.rds$"
+  )
+  
+  example_surveys <- read_surveys(
+    file.path(examples_dir, survey_files)
+  )
+  
+  expect_error(
+    pull_survey(
+      example_surveys,
+      id = "missing_survey"
+    ),
+    "is not present"
+  )
+})
+
+test_that("pull_survey() errors when filename is not found", {
+  
+  examples_dir <- system.file(
+    "examples",
+    package = "retroharmonize"
+  )
+  
+  survey_files <- dir(
+    examples_dir,
+    pattern = "\\.rds$"
+  )
+  
+  example_surveys <- read_surveys(
+    file.path(examples_dir, survey_files)
+  )
+  
+  expect_error(
+    pull_survey(
+      example_surveys,
+      filename = "missing_file.rds"
+    ),
+    "is not present"
+  )
 })
