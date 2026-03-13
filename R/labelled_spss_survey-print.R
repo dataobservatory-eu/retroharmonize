@@ -17,10 +17,10 @@ print_attributes <- function(x, full = TRUE) {
   if (!is.null(na_range)) {
     cli::cat_line("Missing range:  [", paste(na_range, collapse = ", "), "]")
   }
-  
+
   if (full == FALSE) invisible(x)
   ## full printing goes on below ---------------------
-  
+
   history_attributes <- names(attributes(x))
   history_attributes <- history_attributes[
     !history_attributes %in% c(
@@ -28,14 +28,14 @@ print_attributes <- function(x, full = TRUE) {
       "na_values", "na_range", "class", "id"
     )
   ]
-  
+
   if (length(history_attributes) > 0) {
     last_attribute <- history_attributes[length(history_attributes)]
     history_attributes <- c(history_attributes[1:3], "...", last_attribute)
     history_attributes <- paste(history_attributes, collapse = ", ")
     history_attributes <- gsub("\\,\\s\\.\\.\\.", " [...]", history_attributes)
   }
-  
+
   cli::cat_line(paste0(
     "See all attributes ",
     history_attributes,
@@ -49,11 +49,13 @@ print_attributes <- function(x, full = TRUE) {
 #' @export
 #' @importFrom cli cat_line
 obj_print_header.retroharmonize_labelled_spss_survey <- function(x, ...) {
-  cli::cat_line("<", 
-                vec_ptype_full(x), 
-                "[", 
-                vctrs::vec_size(x),
-                "]>", get_labeltext(x))
+  cli::cat_line(
+    "<",
+    vec_ptype_full(x),
+    "[",
+    vctrs::vec_size(x),
+    "]>", get_labeltext(x)
+  )
   invisible(x)
 }
 
