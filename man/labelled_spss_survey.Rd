@@ -72,6 +72,8 @@ is.labelled_spss_survey(x)
 
 \item{name_orig}{Original variable name. Defaults to the name of `x`.}
 
+\item{i}{Index vector used for subsetting.}
+
 \item{object}{A labelled_spss_survey to summarize.}
 
 \item{value}{Replacement values used when assigning names.}

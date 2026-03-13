@@ -148,6 +148,7 @@ new_labelled_spss_survey <- function(x,
 ## Subsetting -------------------------------------------------
 
 #' @rdname labelled_spss_survey
+#' @param i Index vector used for subsetting.
 #' @export
 `[.retroharmonize_labelled_spss_survey` <- function(x, i, ...) {
   preserve_structure <- attributes(x)
