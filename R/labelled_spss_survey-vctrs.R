@@ -19,6 +19,13 @@
 #' @keywords internal
 NULL
 
+
+#' @keywords internal
+vec_cast_named <- function(x, to, ...) {
+  # identical to haven:::vec_cast_named()
+  stats::setNames(vctrs::vec_cast(x, to, ...), names(x))
+}
+
 #' @rdname labelled_spss_survey_vctrs
 #' @export
 vec_ptype2.retroharmonize_labelled_spss_survey.double <- function(x,
