@@ -28,3 +28,5 @@
 logo.png
 ^codemeta.json
 ^CRAN-SUBMISSION$
+^\.positai$
+^\.claude$
