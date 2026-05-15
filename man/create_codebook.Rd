@@ -77,14 +77,9 @@ codebook_surveys_create(example_surveys)
 [metadata_create()],
 [codebook_surveys_create()]
 
-Other metadata functions: 
-\code{\link{is.crosswalk_table}()},
-\code{\link{metadata_create}()},
-\code{\link{metadata_survey_create}()}
-
-Other metadata functions: 
-\code{\link{is.crosswalk_table}()},
-\code{\link{metadata_create}()},
-\code{\link{metadata_survey_create}()}
+Other metadata functions:
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}},
+\code{\link[=metadata_create]{metadata_create()}},
+\code{\link[=metadata_survey_create]{metadata_survey_create()}}
 }
 \concept{metadata functions}
