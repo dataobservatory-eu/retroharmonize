@@ -36,12 +36,14 @@
 #'   function(s) {
 #'     s[, vapply(
 #'       s,
-#'       function(x) inherits(x, c(
-#'         "retroharmonize_labelled_spss_survey",
-#'         "numeric",
-#'         "character",
-#'         "Date"
-#'       )),
+#'       function(x) {
+#'         inherits(x, c(
+#'           "retroharmonize_labelled_spss_survey",
+#'           "numeric",
+#'           "character",
+#'           "Date"
+#'         ))
+#'       },
 #'       logical(1)
 #'     )]
 #'   }
@@ -82,10 +84,8 @@
 #'   status_message = FALSE
 #' )
 #' }
-
-
-harmonize_survey_values <- function(survey_list, 
-                                    .f, 
+harmonize_survey_values <- function(survey_list,
+                                    .f,
                                     status_message = FALSE) {
   validate_survey_list(survey_list)
 
@@ -94,24 +94,26 @@ harmonize_survey_values <- function(survey_list,
 
   classes <- unlist(lapply(
     survey_list,
-    function(x) lapply(x, function(y) {
-      if (inherits(y, "retroharmonize_labelled_spss_survey")) {
-        "retroharmonize_labelled_spss_survey"
-      } else if (inherits(y, c("numeric", "double", "integer"))) {
-        "numeric"
-      } else if (inherits(y, "character")) {
-        "character"
-      } else if (inherits(y, "Date")) {
-        "Date"
-      } else {
-        "other"
-      }
-    })
+    function(x) {
+      lapply(x, function(y) {
+        if (inherits(y, "retroharmonize_labelled_spss_survey")) {
+          "retroharmonize_labelled_spss_survey"
+        } else if (inherits(y, c("numeric", "double", "integer"))) {
+          "numeric"
+        } else if (inherits(y, "character")) {
+          "character"
+        } else if (inherits(y, "Date")) {
+          "Date"
+        } else {
+          "other"
+        }
+      })
+    }
   ))
   # classes <- unlist(sapply ( survey_list, function(x) sapply( x, function(y) class(y)[1]) ))
 
   # The harmonization must take place by variable classes
-  # The retroharmonized, numeric, character, Date types are 
+  # The retroharmonized, numeric, character, Date types are
   # separately treated ---------------------
 
   retroharmonized <- unique(names(classes[which(classes == "retroharmonize_labelled_spss_survey")]))

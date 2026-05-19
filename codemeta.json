@@ -4,22 +4,16 @@
   "identifier": "retroharmonize",
   "description": "Assist in reproducible retrospective (ex-post) harmonization of data, particularly individual level survey data, by providing tools for organizing metadata, standardizing the coding of variables, and variable names and value labels, including missing values, and documenting the data transformations, with the help of comprehensive s3 classes.",
   "name": "retroharmonize: Ex Post Survey Data Harmonization",
-  "codeRepository": "https://retroharmonize.dataobservatory.eu/",
+  "codeRepository": "https://github.com/dataobservatory-eu/retroharmonize",
   "issueTracker": "https://github.com/dataobservatory-eu/retroharmonize/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.5.0 (2025-04-11 ucrt)",
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
   "author": [
     {
       "@type": "Person",
@@ -412,6 +406,11 @@
     "SystemRequirements": null
   },
   "isPartOf": "http://ropengov.org/",
-  "keywords": "ropengov",
-  "fileSize": "5675.426KB"
+  "keywords": ["ropengov", "r", "r-package", "rstats", "cran"],
+  "fileSize": "5510.916KB",
+  "relatedLink": "https://retroharmonize.dataobservatory.eu/",
+  "releaseNotes": "https://github.com/dataobservatory-eu/retroharmonize/blob/main/NEWS.md",
+  "readme": "https://github.com/dataobservatory-eu/retroharmonize/blob/main/README.md",
+  "contIntegration": ["https://app.codecov.io/gh/dataobservatory-eu/retroharmonize", "https://github.com/dataobservatory-eu/retroharmonize/actions"],
+  "developmentStatus": "https://www.repostatus.org/#active"
 }
