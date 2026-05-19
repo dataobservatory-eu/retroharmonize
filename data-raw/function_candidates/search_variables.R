@@ -38,13 +38,12 @@
 #'
 #' @export
 search_variables <- function(
-    catalog,
-    pattern,
-    ignore_case = TRUE
+  catalog,
+  pattern,
+  ignore_case = TRUE
 ) {
-  
   stopifnot(inherits(catalog, "survey_catalog"))
-  
+
   catalog %>%
     dplyr::filter(
       stringr::str_detect(

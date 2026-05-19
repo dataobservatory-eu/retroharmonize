@@ -75,15 +75,16 @@ crosswalk_surveys <- function(crosswalk_table,
   is.crosswalk_table(crosswalk_table)
 
   # Remove surveys that are not used in the crosswalk table ---------------------------------
-  available_surveys <- unlist(lapply(survey_list, 
-                                     function(x) attr(x, "id"))
-                              )
+  available_surveys <- unlist(lapply(
+    survey_list,
+    function(x) attr(x, "id")
+  ))
   surveys_to_harmonize <- unique(crosswalk_table$id)
   survey_list[!available_surveys %in% surveys_to_harmonize] <- NULL
 
   # See if the na_values are given in the crosswalk_table -----------------------------------
-  if (!all(c("na_numeric_target", "na_label_target") %in% 
-           names(crosswalk_table))) {
+  if (!all(c("na_numeric_target", "na_label_target") %in%
+    names(crosswalk_table))) {
     if (!is.null(na_values)) {
       assert_that(is.character(na_values) | is.numeric(na_values),
         msg = "Parameter 'na_values' must be a named character or numeric string, it is not this type"
@@ -248,7 +249,7 @@ crosswalk <- function(survey_list, crosswalk_table, na_values = NULL) {
 #' @details The table contains a \code{var_name_target} and \code{val_label_target} column, but
 #' these values need to be set by further manual or reproducible harmonization steps.
 #'
-#' @param metadata A metadata table created by 
+#' @param metadata A metadata table created by
 #' \code{\link{metadata_create}}.
 #' @return A tibble with raw crosswalk table. It contains all harmonization tasks, but the
 #' target values need to be set by further manipulations.
@@ -269,7 +270,7 @@ crosswalk_table_create <- function(metadata) {
   )
 
   compulsory_columns <- c("filename", "id", "var_name_orig", "labels")
-  
+
   missing_columns <- setdiff(compulsory_columns, names(metadata))
 
   assert_that(

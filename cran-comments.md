@@ -1,27 +1,23 @@
-This update was triggered by new automated checks and stricter validation 
-introduced after the previous CRAN release (notably around S3 method 
-documentation, example execution, namespace imports, and vctrs/cli 
-interactions).
+## Test environments
 
-The package codebase was already functional, but recent CRAN and R-hub 
-checks exposed a number of issues that were not flagged in earlier (2023) 
-environments.
+Local:
+* Windows10 x86_64-w64-mingw32 (64-bit), R version 4.5.0, locally.
 
-In this release we:
-- corrected and completed S3 method documentation and Rd usage sections,
-- fixed examples and \donttest{} blocks to run cleanly under --run-donttest,
-- removed unused imports and clarified implicit dependencies,
-- added targeted unit tests to cover previously untested harmonization and import paths,
-- addressed NOTES related to non-standard evaluation and vctrs-based methods.
+r_hub:
+* various platforms, mac, Windows, Ubuntu, Fedora.
 
-The functionality of the package is unchanged; this update focuses on
-robustness, documentation completeness, and compatibility with current
-CRAN policies.
-
-All checks pass locally, via GitHub Actions, and 
-on R-hub (Linux, Windows, macOS).
-
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 There are two NOTES:
+
+## resubmission 
+
+- The 0.2.8 is a resubmission of 0.2.7 that was offered out of the time
+window to retain the package on CRAN due to an archived dependency.
+
+- Dependencies were modernised. Unit test were updated, extended, and some small 
+(earlier not flagged) edge cases better handled.
+
+- No change in the function API.
 
 ## NOTE 1
 
@@ -30,8 +26,11 @@ installed size is  5.7Mb
        doc        1.1Mb
        examples   1.9Mb
 
-The size of the package did not increse since the last release on CRAN.  Because of the nature of the package (harmonizing real-life surveys) the
-examples are relatively great in size (with permission, we use small subsets of actual Eurobarometer surveys.) This makes unit-testing and documenting with vignettes much easier and more realistic for the user.
+The size of the package did not increse since the last release on CRAN. 
+Because of the nature of the package (harmonizing real-life surveys) the
+examples are relatively great in size (with permission, we use small subsets of 
+actual Eurobarometer surveys.) This makes unit-testing and documenting with 
+vignettes much easier and more realistic for the user.
 
 ## NOTE 2
 lines wider than 90 characters:

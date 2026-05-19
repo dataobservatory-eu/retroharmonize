@@ -79,62 +79,54 @@
 #'
 #' @export
 create_variable_catalog <- function(
-    survey_files,
-    reader = haven::read_sav,
-    dataset_id = NULL,
-    dataset_label = NULL,
-    extract_value_labels = TRUE,
-    extract_missing = TRUE,
-    verbose = TRUE
+  survey_files,
+  reader = haven::read_sav,
+  dataset_id = NULL,
+  dataset_label = NULL,
+  extract_value_labels = TRUE,
+  extract_missing = TRUE,
+  verbose = TRUE
 ) {
-  
   stopifnot(is.character(survey_files))
-  
+
   if (is.null(dataset_id)) {
     dataset_id <- basename(survey_files)
   }
-  
+
   if (length(dataset_id) == 1) {
     dataset_id <- rep(dataset_id, length(survey_files))
   }
-  
+
   stopifnot(length(dataset_id) == length(survey_files))
-  
+
   out <- purrr::map2_dfr(
     survey_files,
     dataset_id,
     function(file, id) {
-      
       if (verbose) {
         message("Reading: ", file)
       }
-      
+
       x <- reader(file)
-      
+
       tibble::tibble(
         dataset_id = id,
         file = basename(file),
-        
         var_index = seq_along(x),
-        
         var_name = names(x),
-        
         var_label = unname(
           purrr::map_chr(
             x,
             ~ attr(.x, "label") %||% NA_character_
           )
         ),
-        
         var_class = unname(
           purrr::map_chr(
             x,
             ~ class(.x)[1]
           )
         ),
-        
         n_obs = nrow(x),
-        
         value_labels = if (extract_value_labels) {
           purrr::map(
             x,
@@ -143,7 +135,6 @@ create_variable_catalog <- function(
         } else {
           vector("list", length(x))
         },
-        
         na_values = if (extract_missing) {
           purrr::map(
             x,
@@ -152,7 +143,6 @@ create_variable_catalog <- function(
         } else {
           vector("list", length(x))
         },
-        
         na_range = if (extract_missing) {
           purrr::map(
             x,
@@ -164,11 +154,11 @@ create_variable_catalog <- function(
       )
     }
   )
-  
+
   class(out) <- c(
     "survey_catalog",
     class(out)
   )
-  
+
   out
 }
