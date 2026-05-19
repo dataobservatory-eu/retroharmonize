@@ -43,3 +43,7 @@ retroharmonize.txt
 .positai
 
 data-raw/gesis
+
+
+# bash files
+*.sh

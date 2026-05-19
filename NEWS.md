@@ -1,3 +1,11 @@
+# retroharmonize 0.2.7
+* Due to an archived dependency, the package was temporary archived on CRAN, this
+is a candidate to bring it back.
+* Dependencies were modernised.
+* Unit test were updated, extended, and some small (earlier not flagged) edge 
+cases better handled.
+* No change in the function API.
+
 # retroharmonize 0.2.6
 * Various improvements due to extensive testing and feedback. No change in 
 the API.
