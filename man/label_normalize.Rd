@@ -56,26 +56,17 @@ val_label_normalize(
 )
 }
 \seealso{
-Other variable label harmonization functions: 
-\code{\link{na_range_to_values}()}
+Other variable label harmonization functions:
+\code{\link[=na_range_to_values]{na_range_to_values()}}
 
-Other harmonization functions: 
-\code{\link{collect_val_labels}()},
-\code{\link{crosswalk_surveys}()},
-\code{\link{harmonize_na_values}()},
-\code{\link{harmonize_survey_values}()},
-\code{\link{harmonize_values}()},
-\code{\link{harmonize_var_names}()},
-\code{\link{is.crosswalk_table}()}
-
-Other harmonization functions: 
-\code{\link{collect_val_labels}()},
-\code{\link{crosswalk_surveys}()},
-\code{\link{harmonize_na_values}()},
-\code{\link{harmonize_survey_values}()},
-\code{\link{harmonize_values}()},
-\code{\link{harmonize_var_names}()},
-\code{\link{is.crosswalk_table}()}
+Other harmonization functions:
+\code{\link[=collect_val_labels]{collect_val_labels()}},
+\code{\link[=crosswalk_surveys]{crosswalk_surveys()}},
+\code{\link[=harmonize_na_values]{harmonize_na_values()}},
+\code{\link[=harmonize_survey_values]{harmonize_survey_values()}},
+\code{\link[=harmonize_values]{harmonize_values()}},
+\code{\link[=harmonize_var_names]{harmonize_var_names()}},
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}}
 }
 \concept{harmonization functions}
 \concept{variable label harmonization functions}

@@ -30,16 +30,6 @@ labelled_spss_survey(
 
 \method{[}{retroharmonize_labelled_spss_survey}(x, i, ...)
 
-labelled_spss_survey(
-  x = double(),
-  labels = NULL,
-  na_values = NULL,
-  na_range = NULL,
-  label = NULL,
-  id = NULL,
-  name_orig = NULL
-)
-
 \method{[}{retroharmonize_labelled_spss_survey}(x, i, ...)
 
 \method{print}{retroharmonize_labelled_spss_survey}(x, ...)
@@ -120,15 +110,8 @@ the format method.}
 \value{
 An object of class `"retroharmonize_labelled_spss_survey"`,
 extending [haven::labelled_spss()].
-
-An object of class `"retroharmonize_labelled_spss_survey"`,
-extending [haven::labelled_spss()].
 }
 \description{
-Create a labelled vector compatible with
-[haven::labelled_spss()] that carries additional
-survey-level provenance metadata.
-
 Create a labelled vector compatible with
 [haven::labelled_spss()] that carries additional
 survey-level provenance metadata.
@@ -150,35 +133,8 @@ before computation.
 
 You can coerce labelled_spss_survey vectors to numeric,
 character or factor representation.
-
-The resulting object behaves like a
-`haven_labelled_spss` vector, but stores:
-\itemize{
-  \item a survey identifier
-  \item the original variable name
-  \item the original value coding
-}
-
-
-Several arithmetic (statistical summary) methods operate on the
-numeric representation of labelled survey vectors, converting
-SPSS-style missing values to `NA`
-before computation.
-
-You can coerce labelled_spss_survey vectors to numeric,
-character or factor representation.
 }
 \examples{
-x <- labelled_spss_survey(
-  x = c(1, 2, 9),
-  labels = c(Yes = 1, No = 2),
-  na_values = 9,
-  id = "survey_1"
-)
-
-is.na(x)
-as_factor(x)
-
 x <- labelled_spss_survey(
   x = c(1, 2, 9),
   labels = c(Yes = 1, No = 2),

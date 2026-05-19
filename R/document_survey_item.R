@@ -1,17 +1,24 @@
-#' @title Document survey item harmonization
+#' Document survey item provenance
 #'
-#' @description Document the current and historic coding and labelling of the
-#' variable.
+#' @description
+#' Document the current and historical coding, labels, missing values,
+#' and survey provenance of a harmonized survey variable.
 #'
-#' @param x A labelled_spss_survey vector from a single survey
-#' or concatenated from several surveys.
-#' @return Returns a list of the current and historic coding, labelling
-#' of the valid range and missing values or range, the history of the
-#' variable names and the history of the survey IDs.
-#' @importFrom rlang set_names
-#' @importFrom tibble as_tibble
-#' @importFrom dplyr bind_cols
+#' @param x A `labelled_spss_survey` vector originating from a single
+#'   survey or concatenated from multiple surveys.
+#'
+#' @return
+#' A named list containing:
+#' \itemize{
+#'   \item current and historical value coding,
+#'   \item variable labels,
+#'   \item valid and missing value definitions,
+#'   \item original variable names,
+#'   \item survey identifiers.
+#' }
+#'
 #' @family documentation functions
+#'
 #' @examples
 #' var1 <- labelled::labelled_spss(
 #'   x = c(1, 0, 1, 1, 0, 8, 9),
@@ -35,38 +42,47 @@
 #'   na_values = c(8, 9)
 #' )
 #'
+#' harmonization <- list(
+#'   from = c(
+#'     "^tend\\sto|^trust",
+#'     "^tend\\snot|not\\strust",
+#'     "^dk|^don",
+#'     "^inap"
+#'   ),
+#'   to = c(
+#'     "trust",
+#'     "not_trust",
+#'     "do_not_know",
+#'     "inap"
+#'   ),
+#'   numeric_values = c(1, 0, 99997, 99999)
+#' )
+#'
+#' missing_values <- c(
+#'   "do_not_know" = 99997,
+#'   "inap" = 99999
+#' )
+#'
 #' h1 <- harmonize_values(
 #'   x = var1,
 #'   harmonize_label = "Do you trust the European Union?",
-#'   harmonize_labels = list(
-#'     from = c("^tend\\sto|^trust", "^tend\\snot|not\\strust", "^dk|^don", "^inap"),
-#'     to = c("trust", "not_trust", "do_not_know", "inap"),
-#'     numeric_values = c(1, 0, 99997, 99999)
-#'   ),
-#'   na_values = c(
-#'     "do_not_know" = 99997,
-#'     "inap" = 99999
-#'   ),
-#'   id = "survey1",
+#'   harmonize_labels = harmonization,
+#'   na_values = missing_values,
+#'   id = "survey1"
 #' )
 #'
 #' h2 <- harmonize_values(
 #'   x = var2,
 #'   harmonize_label = "Do you trust the European Union?",
-#'   harmonize_labels = list(
-#'     from = c("^tend\\sto|^trust", "^tend\\snot|not\\strust", "^dk|^don", "^inap"),
-#'     to = c("trust", "not_trust", "do_not_know", "inap"),
-#'     numeric_values = c(1, 0, 99997, 99999)
-#'   ),
-#'   na_values = c(
-#'     "do_not_know" = 99997,
-#'     "inap" = 99999
-#'   ),
+#'   harmonize_labels = harmonization,
+#'   na_values = missing_values,
 #'   id = "survey2"
 #' )
 #'
 #' h3 <- concatenate(h1, h2)
+#'
 #' document_survey_item(h3)
+#'
 #' @export
 
 document_survey_item <- function(x) {

@@ -81,13 +81,13 @@ harmonized <- crosswalk_surveys(
 [crosswalk_table_create()] to create a crosswalk table,
 [harmonize_survey_variables()] for lower-level variable harmonization.
 
-Other harmonization functions: 
-\code{\link{collect_val_labels}()},
-\code{\link{harmonize_na_values}()},
-\code{\link{harmonize_survey_values}()},
-\code{\link{harmonize_values}()},
-\code{\link{harmonize_var_names}()},
-\code{\link{is.crosswalk_table}()},
-\code{\link{label_normalize}()}
+Other harmonization functions:
+\code{\link[=collect_val_labels]{collect_val_labels()}},
+\code{\link[=harmonize_na_values]{harmonize_na_values()}},
+\code{\link[=harmonize_survey_values]{harmonize_survey_values()}},
+\code{\link[=harmonize_values]{harmonize_values()}},
+\code{\link[=harmonize_var_names]{harmonize_var_names()}},
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}},
+\code{\link[=label_normalize]{label_normalize()}}
 }
 \concept{harmonization functions}

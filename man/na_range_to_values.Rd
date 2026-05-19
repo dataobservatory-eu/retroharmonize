@@ -37,7 +37,7 @@ summarizing survey data.
 [labelled::na_values()],
 [as_numeric()]
 
-Other variable label harmonization functions: 
-\code{\link{label_normalize}()}
+Other variable label harmonization functions:
+\code{\link[=label_normalize]{label_normalize()}}
 }
 \concept{variable label harmonization functions}

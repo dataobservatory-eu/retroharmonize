@@ -65,12 +65,14 @@ surveys <- lapply(
   function(s) {
     s[, vapply(
       s,
-      function(x) inherits(x, c(
-        "retroharmonize_labelled_spss_survey",
-        "numeric",
-        "character",
-        "Date"
-      )),
+      function(x) {
+        inherits(x, c(
+          "retroharmonize_labelled_spss_survey",
+          "numeric",
+          "character",
+          "Date"
+        ))
+      },
       logical(1)
     )]
   }
@@ -87,13 +89,13 @@ head(harmonized)
 }
 }
 \seealso{
-Other harmonization functions: 
-\code{\link{collect_val_labels}()},
-\code{\link{crosswalk_surveys}()},
-\code{\link{harmonize_na_values}()},
-\code{\link{harmonize_values}()},
-\code{\link{harmonize_var_names}()},
-\code{\link{is.crosswalk_table}()},
-\code{\link{label_normalize}()}
+Other harmonization functions:
+\code{\link[=collect_val_labels]{collect_val_labels()}},
+\code{\link[=crosswalk_surveys]{crosswalk_surveys()}},
+\code{\link[=harmonize_na_values]{harmonize_na_values()}},
+\code{\link[=harmonize_values]{harmonize_values()}},
+\code{\link[=harmonize_var_names]{harmonize_var_names()}},
+\code{\link[=is.crosswalk_table]{is.crosswalk_table()}},
+\code{\link[=label_normalize]{label_normalize()}}
 }
 \concept{harmonization functions}

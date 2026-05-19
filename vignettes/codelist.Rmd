@@ -79,7 +79,7 @@ The current retroharmonize normalizes such characters early on, and this should 
 data.frame(
   Value = c(1, 2, 11),
   Label = c(
-    "(Re-)Married: without children", 
+    "(Re-)Married: without children",
     "(Re-)Married: children this marriage",
     "Divorced/Separated: without children"
   ),

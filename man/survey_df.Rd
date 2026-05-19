@@ -74,7 +74,7 @@ survey_df(
 \seealso{
 [read_survey()] for importing survey data from external files.
 
-Other importing functions: 
-\code{\link{survey}()}
+Other importing functions:
+\code{\link[=survey]{survey()}}
 }
 \concept{importing functions}

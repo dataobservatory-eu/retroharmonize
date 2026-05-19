@@ -126,8 +126,8 @@ harmonize_values <- function(
   }
 
   if (!is.null(harmonize_labels)) {
-    validate_label_list(label_list = harmonize_labels) 
-    }
+    validate_label_list(label_list = harmonize_labels)
+  }
 
   if (is.null(id)) {
     # if not otherwise stated, inherit the ID of x, if present

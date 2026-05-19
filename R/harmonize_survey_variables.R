@@ -41,8 +41,9 @@
 #'
 #' @examples
 #' # Create a temporary CSV file from an example survey
-#' path <- system.file("examples", "ZA7576.rds", 
-#'                     package = "retroharmonize")
+#' path <- system.file("examples", "ZA7576.rds",
+#'   package = "retroharmonize"
+#' )
 #' survey <- read_rds(path)
 #'
 #' tmp <- tempfile(fileext = ".csv")
@@ -64,11 +65,11 @@ harmonize_survey_variables <- function(crosswalk_table,
                                        survey_paths = NULL,
                                        import_path = NULL,
                                        export_path = NULL) {
-  # This is a wrapper for subset_save_survey with strict validation 
+  # This is a wrapper for subset_save_survey with strict validation
   # of new variable names.
 
   # validates structure and unambiguous naming
-  is.crosswalk_table(crosswalk_table) 
+  is.crosswalk_table(crosswalk_table)
 
   subsetted_surveys <- subset_surveys(
     crosswalk_table = crosswalk_table,

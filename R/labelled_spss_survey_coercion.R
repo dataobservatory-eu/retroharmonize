@@ -52,4 +52,3 @@ as_factor <- function(x, levels = "default", ordered = FALSE) {
   class(tmp) <- "factor"
   tmp
 }
-

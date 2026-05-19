@@ -56,7 +56,7 @@
 #' * a character vector of filenames written to `export_path`.
 #'
 #' @family subsetting functions
-#' 
+#'
 #' @importFrom dplyr select any_of
 #'
 #' @seealso
@@ -166,12 +166,16 @@ subset_surveys <- function(survey_list,
       }
 
       if (!is.null(export_path)) {
-        saved_file_names <- lapply(seq_along(files_to_subset), 
-                                   function(x) get_survey(x))
+        saved_file_names <- lapply(
+          seq_along(files_to_subset),
+          function(x) get_survey(x)
+        )
         return(unlist(saved_file_names))
       }
-      return_list <- lapply(seq_along(files_to_subset), 
-                            function(x) get_survey(x))
+      return_list <- lapply(
+        seq_along(files_to_subset),
+        function(x) get_survey(x)
+      )
     } else {
       ## Subsetting without crosswalk table -----------------
 
@@ -199,14 +203,16 @@ subset_surveys <- function(survey_list,
     ### Subsetting from memory, with cross_table ---------------------------------------------
 
     if (!is.null(crosswalk_table)) {
-      available_surveys <- vapply(survey_list, 
-                                  function(x) attr(x, "id"), 
-                                  character(1)
-                                  )
-      
+      available_surveys <- vapply(
+        survey_list,
+        function(x) attr(x, "id"),
+        character(1)
+      )
+
       surveys_in_ctable <- unique(
-        crosswalk_table$id)[unique(crosswalk_table$id) %in%
-                              available_surveys]
+        crosswalk_table$id
+      )[unique(crosswalk_table$id) %in%
+        available_surveys]
 
       s <- which(surveys_in_ctable == available_surveys)
 
@@ -229,16 +235,18 @@ subset_surveys <- function(survey_list,
       }
 
       if (!is.null(export_path)) {
-        saved_file_names <- lapply(seq_along(s), 
-                                   function(x) get_survey_memory(x)
-                                   
-                                   )
+        saved_file_names <- lapply(
+          seq_along(s),
+          function(x) get_survey_memory(x)
+        )
         return(unlist(saved_file_names))
       } else {
-        return_list <- lapply(seq_along(s),
-                              function(x) 
-                                get_survey_memory(x)
-                              )
+        return_list <- lapply(
+          seq_along(s),
+          function(x) {
+            get_survey_memory(x)
+          }
+        )
       }
     } else {
       ### Subsetting from memory, without cross_table ------------------------------
@@ -253,13 +261,15 @@ subset_surveys <- function(survey_list,
 
       if (!is.null(export_path)) {
         saved_file_names <- lapply(
-          seq_along(survey_list), 
-          function(x) get_survey_no_ctable_memory(x))
+          seq_along(survey_list),
+          function(x) get_survey_no_ctable_memory(x)
+        )
         return(unlist(saved_file_names))
       } else {
-        return_list <- lapply(seq_along(survey_list), 
-                              function(x) get_survey_no_ctable_memory(x)
-                              )
+        return_list <- lapply(
+          seq_along(survey_list),
+          function(x) get_survey_no_ctable_memory(x)
+        )
       }
     }
   }

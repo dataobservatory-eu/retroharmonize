@@ -22,13 +22,13 @@ vec_convert_na <- function(x) {
 #' @importFrom stats median
 #' @inheritParams stats::median
 #' @export
-median.retroharmonize_labelled_spss_survey <- function(x, 
-                                                       na.rm = TRUE, 
+median.retroharmonize_labelled_spss_survey <- function(x,
+                                                       na.rm = TRUE,
                                                        ...) {
   if (is.character(x)) {
     abort("Can't compute median of labelled_spss_survey<character>")
   }
-  
+
   median(vec_convert_na(x), na.rm = na.rm, ...)
 }
 
@@ -37,13 +37,13 @@ median.retroharmonize_labelled_spss_survey <- function(x,
 #' @importFrom stats quantile
 #' @inheritParams stats::quantile
 #' @export
-quantile.retroharmonize_labelled_spss_survey <- function(x, 
-                                                         probs, 
+quantile.retroharmonize_labelled_spss_survey <- function(x,
+                                                         probs,
                                                          ...) {
   if (is.character(x)) {
     abort("Can't compute quantiles of labelled_spss_survey<character>")
   }
-  
+
   quantile(vec_convert_na(x), probs, na.rm = TRUE, ...)
 }
 
@@ -52,17 +52,17 @@ quantile.retroharmonize_labelled_spss_survey <- function(x,
 #' @importFrom stats weighted.mean
 #' @inheritParams stats::weighted.mean
 #' @export
-weighted.mean.retroharmonize_labelled_spss_survey <- function(x, 
-                                                              w, 
+weighted.mean.retroharmonize_labelled_spss_survey <- function(x,
+                                                              w,
                                                               ...) {
   if (is.character(x)) {
     abort("Can't compute weighted mean of labelled_spss_survey<character>")
   }
-  
+
   if (!is.numeric(w)) {
     abort("Weights must be numeric.")
   }
-  
+
   weighted.mean(vec_convert_na(x), w, na.rm = TRUE, ...)
 }
 
@@ -74,7 +74,7 @@ mean.retroharmonize_labelled_spss_survey <- function(x, ...) {
   if (is.character(x)) {
     abort("Can't compute mean of labelled_spss_survey<character>")
   }
-  
+
   mean(vec_convert_na(x), ...)
 }
 
@@ -85,7 +85,6 @@ sum.retroharmonize_labelled_spss_survey <- function(x, ...) {
   if (is.character(x)) {
     abort("Can't compute sum of labelled_spss_survey<character>")
   }
-  
+
   sum(vec_convert_na(x), ...)
 }
-

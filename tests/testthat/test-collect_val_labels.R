@@ -1,14 +1,13 @@
 test_that("val label collection works", {
-  
   test_survey <- retroharmonize::read_rds(
     file = system.file("examples", "ZA7576.rds",
-                       package = "retroharmonize"
+      package = "retroharmonize"
     ),
     id = "test"
   )
-  
+
   example_metadata <- metadata_create(survey_list = test_survey)
-  
+
   trust_media_metadata <- example_metadata[27, ]
   expect_equal(
     collect_val_labels(metadata = trust_media_metadata),

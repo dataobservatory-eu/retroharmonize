@@ -1,15 +1,14 @@
 test_that("merge_surveys example runs without error", {
-  
   examples_dir <- system.file("examples", package = "retroharmonize")
   survey_files <- dir(examples_dir, pattern = "\\.rds$", full.names = TRUE)
-  
+
   example_surveys <- read_surveys(
     survey_files,
     save_to_rds = FALSE
   )
-  
+
   metadata <- metadata_create(survey_list = example_surveys)
-  
+
   to_harmonize <- metadata %>%
     dplyr::filter(
       var_name_orig %in% c("rowid", "w1") |
@@ -24,7 +23,7 @@ test_that("merge_surveys example runs without error", {
         .data$var_name_target
       )
     )
-  
+
   expect_no_error(
     merge_surveys(
       survey_list = example_surveys,

@@ -2,22 +2,27 @@
 % Please edit documentation in R/document_survey_item.R
 \name{document_survey_item}
 \alias{document_survey_item}
-\title{Document survey item harmonization}
+\title{Document survey item provenance}
 \usage{
 document_survey_item(x)
 }
 \arguments{
-\item{x}{A labelled_spss_survey vector from a single survey
-or concatenated from several surveys.}
+\item{x}{A `labelled_spss_survey` vector originating from a single
+survey or concatenated from multiple surveys.}
 }
 \value{
-Returns a list of the current and historic coding, labelling
-of the valid range and missing values or range, the history of the
-variable names and the history of the survey IDs.
+A named list containing:
+\itemize{
+  \item current and historical value coding,
+  \item variable labels,
+  \item valid and missing value definitions,
+  \item original variable names,
+  \item survey identifiers.
+}
 }
 \description{
-Document the current and historic coding and labelling of the
-variable.
+Document the current and historical coding, labels, missing values,
+and survey provenance of a harmonized survey variable.
 }
 \examples{
 var1 <- labelled::labelled_spss(
@@ -42,41 +47,50 @@ var2 <- labelled::labelled_spss(
   na_values = c(8, 9)
 )
 
+harmonization <- list(
+  from = c(
+    "^tend\\\\sto|^trust",
+    "^tend\\\\snot|not\\\\strust",
+    "^dk|^don",
+    "^inap"
+  ),
+  to = c(
+    "trust",
+    "not_trust",
+    "do_not_know",
+    "inap"
+  ),
+  numeric_values = c(1, 0, 99997, 99999)
+)
+
+missing_values <- c(
+  "do_not_know" = 99997,
+  "inap" = 99999
+)
+
 h1 <- harmonize_values(
   x = var1,
   harmonize_label = "Do you trust the European Union?",
-  harmonize_labels = list(
-    from = c("^tend\\\\sto|^trust", "^tend\\\\snot|not\\\\strust", "^dk|^don", "^inap"),
-    to = c("trust", "not_trust", "do_not_know", "inap"),
-    numeric_values = c(1, 0, 99997, 99999)
-  ),
-  na_values = c(
-    "do_not_know" = 99997,
-    "inap" = 99999
-  ),
-  id = "survey1",
+  harmonize_labels = harmonization,
+  na_values = missing_values,
+  id = "survey1"
 )
 
 h2 <- harmonize_values(
   x = var2,
   harmonize_label = "Do you trust the European Union?",
-  harmonize_labels = list(
-    from = c("^tend\\\\sto|^trust", "^tend\\\\snot|not\\\\strust", "^dk|^don", "^inap"),
-    to = c("trust", "not_trust", "do_not_know", "inap"),
-    numeric_values = c(1, 0, 99997, 99999)
-  ),
-  na_values = c(
-    "do_not_know" = 99997,
-    "inap" = 99999
-  ),
+  harmonize_labels = harmonization,
+  na_values = missing_values,
   id = "survey2"
 )
 
 h3 <- concatenate(h1, h2)
+
 document_survey_item(h3)
+
 }
 \seealso{
-Other documentation functions: 
-\code{\link{document_surveys}()}
+Other documentation functions:
+\code{\link[=document_surveys]{document_surveys()}}
 }
 \concept{documentation functions}

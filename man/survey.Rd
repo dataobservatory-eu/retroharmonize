@@ -48,7 +48,7 @@ example_survey <- survey(
 )
 }
 \seealso{
-Other importing functions: 
-\code{\link{is.survey_df}()}
+Other importing functions:
+\code{\link[=is.survey_df]{is.survey_df()}}
 }
 \concept{importing functions}

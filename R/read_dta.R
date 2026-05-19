@@ -109,14 +109,18 @@ read_dta <- function(file,
     tmp$rowid
   ) <- paste0("Unique identifier in ", id)
 
-  converted <- tmp[!vapply(tmp, 
-                           function(x) is.null(attr(x, "labels")), 
-                           logical(1))]
-  
+  converted <- tmp[!vapply(
+    tmp,
+    function(x) is.null(attr(x, "labels")),
+    logical(1)
+  )]
+
   converted <- converted[
-    vapply(converted,
-           function(x) length(attr(x, "labels")) > 0,
-           logical(1))
+    vapply(
+      converted,
+      function(x) length(attr(x, "labels")) > 0,
+      logical(1)
+    )
   ]
 
   converted <- converted %>%
@@ -164,7 +168,7 @@ read_dta <- function(file,
 
   labelling_orig <- names(label_orig)
   labelling_orig[as.numeric(which(vapply(label_orig, is.null, logical(1))))] <- ""
-  
+
   original_labels <- lapply(
     label_orig,
     function(x) {
@@ -177,10 +181,11 @@ read_dta <- function(file,
     labelled::var_label(return_df[[i]]) <- original_labels[[i]]
   }
 
-  return_survey <- survey(return_df, 
-                          id = id, 
-                          filename = filename, 
-                          doi = doi)
+  return_survey <- survey(return_df,
+    id = id,
+    filename = filename,
+    doi = doi
+  )
 
   object_size <- as.numeric(object.size(as_tibble(return_df)))
   attr(return_survey, "object_size") <- object_size

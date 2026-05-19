@@ -41,7 +41,7 @@ labelled missing values.
 [labelled_spss_survey()],
 [haven::as_factor()]
 
-Other type conversion functions: 
-\code{\link{as_labelled_spss_survey}()}
+Other type conversion functions:
+\code{\link[=as_labelled_spss_survey]{as_labelled_spss_survey()}}
 }
 \concept{type conversion functions}

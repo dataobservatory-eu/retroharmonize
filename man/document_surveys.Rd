@@ -60,7 +60,7 @@ document_surveys(survey_paths = file.path(examples_dir, my_rds_files))
 
 }
 \seealso{
-Other documentation functions: 
-\code{\link{document_survey_item}()}
+Other documentation functions:
+\code{\link[=document_survey_item]{document_survey_item()}}
 }
 \concept{documentation functions}

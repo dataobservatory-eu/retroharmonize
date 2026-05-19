@@ -206,3 +206,63 @@ verify_output("retroh_int.txt", {
   )
   pillar::pillar(x1)
 })
+
+
+test_that("vec_ptype_full returns a character scalar", {
+  
+  # vec_ptype_full.retroharmonize_labelled_spss_survey
+  
+  x1 <- labelled_spss_survey(
+    x = 1:3,
+    labels = c(Yes = 1),
+    id = "survey1"
+  )
+  
+  ptype <- vctrs::vec_ptype_full(x1)
+  
+  expect_true(is.character(ptype))
+  expect_length(ptype, 1)
+})
+
+
+test_that("vec_ptype2 returns double prototype for compatible vectors", {
+  
+  v1 <- labelled_spss_survey(
+    x = c(1, 0),
+    labels = c(yes = 1, no = 0),
+    id = "a"
+  )
+  
+  v2 <- labelled_spss_survey(
+    x = c(1, 1),
+    labels = c(yes = 1, no = 0),
+    id = "b"
+  )
+  
+  ptype <- vctrs::vec_ptype2(v1, v2)
+  
+  expect_s3_class(
+    ptype,
+    "retroharmonize_labelled_spss_survey"
+  )
+})
+
+
+test_that("vec_ptype2 errors on incompatible labels", {
+  
+  v1 <- labelled_spss_survey(
+    x = c(1, 0),
+    labels = c(yes = 1, no = 0),
+    id = "a"
+  )
+  
+  v2 <- labelled_spss_survey(
+    x = c(1, 0),
+    labels = c(ja = 1, nee = 0),
+    id = "b"
+  )
+  
+  expect_error(
+    vctrs::vec_ptype2(v1, v2)
+  )
+})

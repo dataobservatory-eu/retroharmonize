@@ -58,7 +58,6 @@ read_rds <- function(file,
                      dataset_bibentry = NULL,
                      id = NULL,
                      doi = NULL) {
-  
   source_file_info <- valid_file_info(file)
   filename <- fs::path_file(file)
 
@@ -83,9 +82,10 @@ read_rds <- function(file,
   #  tmp <- tibble::rowid_to_column(tmp)
   # }
 
-  tmp_df <- dataset_df(tmp, 
-                       identifier = doi, 
-                       dataset_bibentry = dataset_bibentry)
+  tmp_df <- dataset_df(tmp,
+    identifier = doi,
+    dataset_bibentry = dataset_bibentry
+  )
 
   if (is.null(doi)) {
     if ("doi" %in% colnames(tmp_df)) {
@@ -100,7 +100,7 @@ read_rds <- function(file,
     "_",
     gsub(paste0("^", id, "_?"), "", tmp_df$rowid)
   )
-  
+
   labelled::var_label(
     tmp_df$rowid
   ) <- paste0("Unique identifier in ", id)

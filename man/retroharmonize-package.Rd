@@ -20,6 +20,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Daniel Antal \email{daniel.antal@dataobservatory.eu} (\href{https://orcid.org/0000-0001-7513-6760}{ORCID})
 
+Authors:
+\itemize{
+  \item Daniel Antal \email{daniel.antal@dataobservatory.eu} (\href{https://orcid.org/0000-0001-7513-6760}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Marta Kolczynska \email{mkolczynska@gmail.com} (\href{https://orcid.org/0000-0003-4981-0437}{ORCID}) [contributor]

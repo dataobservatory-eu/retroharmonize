@@ -12,11 +12,11 @@ crosswalk_table_create(metadata)
 \arguments{
 \item{ctable}{A table to validate if it is a crosswalk table.}
 
-\item{metadata}{A metadata table created by 
+\item{metadata}{A metadata table created by
 [metadata_create()].}
 }
 \value{
-A tibble with raw crosswalk table. It contains all 
+A tibble with raw crosswalk table. It contains all
 harmonization tasks, but the
 target values need to be set by further manipulations.
 }
@@ -25,25 +25,25 @@ Create a crosswalk table with the source variable names
 and variable labels.
 }
 \details{
-The table contains a \code{var_name_target} and 
+The table contains a \code{var_name_target} and
 \code{val_label_target} column, but
-these values need to be set by further manual or 
+these values need to be set by further manual or
 reproducible harmonization steps.
 }
 \seealso{
-Other metadata functions: 
-\code{\link{create_codebook}()},
-\code{\link{metadata_create}()},
-\code{\link{metadata_survey_create}()}
+Other metadata functions:
+\code{\link[=create_codebook]{create_codebook()}},
+\code{\link[=metadata_create]{metadata_create()}},
+\code{\link[=metadata_survey_create]{metadata_survey_create()}}
 
-Other harmonization functions: 
-\code{\link{collect_val_labels}()},
-\code{\link{crosswalk_surveys}()},
-\code{\link{harmonize_na_values}()},
-\code{\link{harmonize_survey_values}()},
-\code{\link{harmonize_values}()},
-\code{\link{harmonize_var_names}()},
-\code{\link{label_normalize}()}
+Other harmonization functions:
+\code{\link[=collect_val_labels]{collect_val_labels()}},
+\code{\link[=crosswalk_surveys]{crosswalk_surveys()}},
+\code{\link[=harmonize_na_values]{harmonize_na_values()}},
+\code{\link[=harmonize_survey_values]{harmonize_survey_values()}},
+\code{\link[=harmonize_values]{harmonize_values()}},
+\code{\link[=harmonize_var_names]{harmonize_var_names()}},
+\code{\link[=label_normalize]{label_normalize()}}
 }
 \concept{harmonization functions}
 \concept{metadata functions}

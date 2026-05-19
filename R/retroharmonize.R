@@ -71,6 +71,6 @@
 utils::globalVariables(c(
   "class_orig", "valid_labels", "val_code_orig", "val_label_orig",
   "na_labels", "entry", "id", "var_name_target", "var_name_orig",
-  "filename", "label_type", "n", "n_na_labels", 
+  "filename", "label_type", "n", "n_na_labels",
   "n_labels", "n_valid_labels", "values"
 ))

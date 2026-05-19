@@ -63,51 +63,48 @@ test_that("read_surveys(...) passes on ...", {
 })
 
 
-
 test_that("read_csv preserves rowid", {
-  
   examples_dir <- system.file(
     "examples",
     package = "retroharmonize"
   )
-  
+
   test_csv_file <- tempfile(fileext = ".csv")
-  
+
   test_read <- read_rds(
     file.path(examples_dir, "ZA7576.rds"),
     id = "ZA7576"
   )
-  
+
   write.csv(
     x = test_read,
     file = test_csv_file,
     row.names = FALSE
   )
-  
+
   re_read <- read_csv(
     file = test_csv_file,
     id = "ZA7576"
   )
-  
+
   expect_true("rowid" %in% names(re_read))
 })
 
 
 test_that("read_csv errors without rowid column", {
-  
   test_csv_file <- tempfile(fileext = ".csv")
-  
+
   test_data <- data.frame(
     x = 1:3,
     y = letters[1:3]
   )
-  
+
   write.csv(
     test_data,
     test_csv_file,
     row.names = FALSE
   )
-  
+
   expect_error(
     read_csv(test_csv_file)
   )
@@ -115,34 +112,30 @@ test_that("read_csv errors without rowid column", {
 
 
 test_that("read_csv stores object size metadata", {
-  
   examples_dir <- system.file(
     "examples",
     package = "retroharmonize"
   )
-  
+
   test_csv_file <- tempfile(fileext = ".csv")
-  
+
   test_read <- read_rds(
     file.path(examples_dir, "ZA7576.rds")
   )
-  
+
   write.csv(
     x = test_read,
     file = test_csv_file,
     row.names = FALSE
   )
-  
+
   re_read <- read_csv(test_csv_file)
-  
+
   expect_true(
     !is.null(attr(re_read, "object_size"))
   )
-  
+
   expect_true(
     !is.null(attr(re_read, "source_file_size"))
   )
 })
-
-
-

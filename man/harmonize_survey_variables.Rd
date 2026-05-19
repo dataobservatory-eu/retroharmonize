@@ -51,8 +51,9 @@ If a column named `"X"` is present (commonly created by
 }
 \examples{
 # Create a temporary CSV file from an example survey
-path <- system.file("examples", "ZA7576.rds", 
-                    package = "retroharmonize")
+path <- system.file("examples", "ZA7576.rds",
+  package = "retroharmonize"
+)
 survey <- read_rds(path)
 
 tmp <- tempfile(fileext = ".csv")
@@ -70,12 +71,12 @@ re_read <- read_csv(
 [read_rds()] for importing surveys from RDS files,
 [survey_df()] for constructing survey objects manually.
 
-Other import functions: 
-\code{\link{pull_survey}()},
-\code{\link{read_csv}()},
-\code{\link{read_dta}()},
-\code{\link{read_rds}()},
-\code{\link{read_spss}()},
-\code{\link{read_surveys}()}
+Other import functions:
+\code{\link[=pull_survey]{pull_survey()}},
+\code{\link[=read_csv]{read_csv()}},
+\code{\link[=read_dta]{read_dta()}},
+\code{\link[=read_rds]{read_rds()}},
+\code{\link[=read_spss]{read_spss()}},
+\code{\link[=read_surveys]{read_surveys()}}
 }
 \concept{import functions}

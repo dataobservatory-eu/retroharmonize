@@ -18,7 +18,7 @@ A vector of labelled_spss_survey
 Labelled to labelled_spss_survey
 }
 \seealso{
-Other type conversion functions: 
+Other type conversion functions:
 \code{\link{labelled_spss_survey_coercion}}
 }
 \concept{type conversion functions}

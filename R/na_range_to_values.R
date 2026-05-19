@@ -37,37 +37,37 @@ na_range_to_values <- function(x) {
   if (is.null(labelled::na_range(x))) {
     return(x)
   }
-  
+
   na_values <- numeric(0)
-  
+
   if (!is.null(labelled::na_values(x))) {
     na_values <- labelled::na_values(x)
   }
-  
+
   na_min <- labelled::na_range(x)[1]
   na_max <- labelled::na_range(x)[2]
-  
+
   if (length(na_values) > 0) {
     if (min(na_values) < na_min) {
       warning("Inconsistent missing ranges: min(na_values) < min(na_range)")
       na_min <- min(na_values)
     }
-    
+
     if (max(na_values) > na_max) {
       warning("Inconsistent missing ranges: max(na_values) > max(na_range)")
       na_max <- max(na_values)
     }
   }
-  
+
   present_na <- unclass(x)[unclass(x) >= na_min & unclass(x) <= na_max]
-  
+
   if (length(present_na) == 0) {
     present_na <- na_min:na_max
   }
-  
+
   labelled::na_values(x) <- present_na
   labelled::na_range(x) <- c(na_min, na_max)
-  
+
   x
 }
 
@@ -85,4 +85,3 @@ is.na_range_to_values <- function(x) {
   !is.null(labelled::na_values(x)) &&
     !is.null(labelled::na_range(x))
 }
-
