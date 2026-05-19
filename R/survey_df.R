@@ -21,7 +21,7 @@
 #' @param identifier A character scalar identifying the survey.
 #' @param filename A character scalar giving the source filename, or `NULL`
 #'   if unknown.
-#'   
+#'
 #' @param ... potentially further arguments for methods.
 #'
 #' @return
@@ -33,7 +33,7 @@
 #' [read_survey()] for importing survey data from external files.
 #'
 #' @family importing functions
-#' 
+#'
 #' @importFrom utils bibentry person
 #' @importFrom dataset is.dataset_df dataset_df datacite subject_create
 #' @importFrom dataset 'identifier<-'
@@ -51,13 +51,12 @@
 #' @export
 
 survey_df <- function(x,
-                      title = NULL, 
+                      title = NULL,
                       creator = person("Unknown", "Creator"),
                       dataset_bibentry = NULL,
                       dataset_subject = NULL,
                       identifier,
                       filename) {
-  
   if (is.null(dataset_subject)) {
     dataset_subject <- dataset::subject_create(
       term = "Surveys",
@@ -68,22 +67,25 @@ survey_df <- function(x,
       prefix = ""
     )
   }
-  
+
   Title <- if (is.null(title)) "Untitled Survey" else title
-  
+
   Creator <- creator
-  
+
   if (is.null(dataset_bibentry)) {
-    dataset_bibentry <- dataset::datacite(Title = Title, 
-                                          Creator = Creator, 
-                                          Subject = dataset_subject)
+    dataset_bibentry <- dataset::datacite(
+      Title = Title,
+      Creator = Creator,
+      Subject = dataset_subject
+    )
   }
 
   if (!is.dataset_df(x)) {
-    tmp <- dataset::dataset_df(x, 
-                               dataset_bibentry = dataset_bibentry, 
-                               identifier = identifier, 
-                               filename = filename)
+    tmp <- dataset::dataset_df(x,
+      dataset_bibentry = dataset_bibentry,
+      identifier = identifier,
+      filename = filename
+    )
   } else {
     tmp <- x
     identifier(tmp) <- identifier

@@ -38,26 +38,24 @@ survey <- function(object = data.frame(),
 #' @keywords internal
 #' @importFrom assertthat assert_that
 validate_survey <- function(object, id, filename, doi) {
-  
-  
   if (!is.null(doi)) {
     if (!is.character(doi) || length(doi) != 1) {
       stop("The 'doi' must be a character of length 1L (or NULL)")
     }
   }
-  
+
   if (!is.null(filename)) {
     if (!is.character(filename) || length(filename) != 1) {
       stop("The 'filename' must be a character of length 1L (or NULL)")
     }
   }
-  
+
   if (!is.null(id)) {
     if (!is.character(id) || length(id) != 1) {
       stop("The 'id' must be a character of length 1L (or NULL)")
     }
   }
-  
+
   assertthat::assert_that(
     inherits(object, "data.frame"),
     msg = "df in validate_survey(df) must be a data.frame like object."
@@ -71,16 +69,18 @@ new_survey <- function(object = tibble::tibble(),
                        id = character(1),
                        filename = character(1),
                        doi = character(1)) {
-  validate_survey(object = object, 
-                  id = id, 
-                  filename = filename, 
-                  doi = doi)
-  
+  validate_survey(
+    object = object,
+    id = id,
+    filename = filename,
+    doi = doi
+  )
+
   structure(object,
-            id = id,
-            filename = filename,
-            doi = doi,
-            class = c("survey", class(object))
+    id = id,
+    filename = filename,
+    doi = doi,
+    class = c("survey", class(object))
   )
 }
 

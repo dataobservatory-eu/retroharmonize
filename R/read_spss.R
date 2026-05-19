@@ -73,7 +73,7 @@
 #' @importFrom labelled var_label var_label<-
 #' @importFrom purrr safely
 #' @importFrom tibble as_tibble rowid_to_column
-#' @importFrom tidyselect all_of
+#' @importFrom tidyselect all_of everything
 #' @importFrom utils object.size
 #'
 #' @export
