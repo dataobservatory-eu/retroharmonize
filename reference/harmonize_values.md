@@ -1,7 +1,14 @@
-# Harmonize the values and labels of labelled vectors
+# Harmonize values and labels of labelled vectors
 
-Create a labelled vector with harmonized numeric coding and value
-labels.
+\`harmonize_values()\` converts heterogeneous labelled survey vectors
+into a harmonized representation suitable for cross-survey integration.
+
+The function:
+
+\- harmonizes value labels using regex-based matching; - assigns
+harmonized numeric codes; - preserves original coding metadata; -
+standardizes user-defined missing values; - preserves SPSS-style
+labelled metadata; - and records provenance attributes.
 
 ## Usage
 
@@ -23,59 +30,81 @@ harmonize_values(
 
 - x:
 
-  A labelled vector
+  A labelled vector, typically of class \`"haven_labelled"\` or
+  \`"haven_labelled_spss"\`.
 
 - harmonize_label:
 
-  A character vector of 1L containing the new, harmonize variable label.
-  Defaults to `NULL`, in which case it uses the variable label of `x`,
-  unless it is also `NULL`.
+  Optional harmonized variable label. Defaults to the original variable
+  label.
 
 - harmonize_labels:
 
-  A list of harmonization values
+  A list describing harmonization rules. Must contain the elements:
+
+  \- \`from\` - \`to\` - \`numeric_values\`
 
 - na_values:
 
-  A named vector of `na_values`, the observations that are defined to be
-  treated as missing in the SPSS-style coding.
+  Named numeric vector defining harmonized missing value codes.
 
 - na_range:
 
-  A min, max range of `na_range`, the continuous missing value range. In
-  most surveys this should be left `NULL`.
+  Optional SPSS-style missing value range. Usually left \`NULL\`.
 
 - id:
 
-  A survey ID, defaults to `survey_id`
+  Survey identifier. Defaults to \`"survey_id"\`.
 
 - name_orig:
 
-  The original name of the variable. If left `NULL` it uses the latest
-  name of the object `x`.
+  Optional original variable name. Defaults to the object name supplied
+  to \`x\`.
 
 - remove:
 
-  Defaults to `NULL`. A character or regex that will be removed from all
-  old value labels, like `"\("|\)` for ( and ).
+  Optional regex pattern removed from original labels before
+  harmonization.
 
 - perl:
 
-  Use perl-like regex? Defaults to `FALSE`.
+  Logical. Use Perl-compatible regular expressions? Defaults to
+  \`FALSE\`.
 
 ## Value
 
-A labelled vector that contains in its metadata attributes the original
-labelling, the original numeric coding and the current labelling, with
-the numerical values representing the harmonized coding.
+A harmonized \`haven_labelled_spss\` vector.
+
+The returned vector preserves:
+
+\- harmonized value labels; - harmonized numeric coding; - SPSS missing
+value metadata; - original coding metadata; - survey provenance
+metadata.
 
 ## Details
 
-Create a labelled vector that contains in its metadata attributes the
-original labelling, the original numeric coding and the current
-labelling, with the numerical values representing the harmonized coding.
+Create a harmonized labelled vector with standardized value labels,
+numeric coding, and missing value definitions.
+
+Harmonization is performed using a harmonization table supplied via
+\`harmonize_labels\`.
+
+The harmonization table must contain:
+
+\- \`from\`: regex patterns matching original labels; - \`to\`:
+harmonized labels; - \`numeric_values\`: harmonized numeric codes.
+
+Original labels and numeric codes are preserved in attributes attached
+to the returned vector.
+
+If no harmonization table is supplied, the function still attempts to
+normalize common missing value labels such as:
+
+\- \`"inap"\` - \`"declined"\` - \`"do_not_know"\`
 
 ## See also
+
+\[harmonize_var_names()\]
 
 Other harmonization functions:
 [`collect_val_labels()`](https://ropengov.github.io/retroharmonize/reference/collect_val_labels.md),
@@ -103,9 +132,24 @@ var1 <- labelled::labelled_spss(
 harmonize_values(
   var1,
   harmonize_labels = list(
-    from = c("^tend\\sto|^trust", "^tend\\snot|not\\strust", "^dk|^don", "^inap"),
-    to = c("trust", "not_trust", "do_not_know", "inap"),
-    numeric_values = c(1, 0, 99997, 99999)
+    from = c(
+      "^tend\\sto|^trust",
+      "^tend\\snot|not\\strust",
+      "^dk|^don",
+      "^inap"
+    ),
+    to = c(
+      "trust",
+      "not_trust",
+      "do_not_know",
+      "inap"
+    ),
+    numeric_values = c(
+      1,
+      0,
+      99997,
+      99999
+    )
   ),
   na_values = c(
     "do_not_know" = 99997,

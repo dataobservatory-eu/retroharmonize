@@ -60,7 +60,7 @@ Table](https://retroharmonize.dataobservatory.eu/articles/crosswalk.html)
 for examples and further clarification.
 
 - [`harmonize_var_names()`](https://ropengov.github.io/retroharmonize/reference/harmonize_var_names.md)
-  : Harmonize the variable names of surveys
+  : Harmonize variable names across surveys
 - [`label_normalize()`](https://ropengov.github.io/retroharmonize/reference/label_normalize.md)
   [`var_label_normalize()`](https://ropengov.github.io/retroharmonize/reference/label_normalize.md)
   [`val_label_normalize()`](https://ropengov.github.io/retroharmonize/reference/label_normalize.md)
@@ -81,7 +81,7 @@ for examples and further clarification.
   [`collect_na_labels()`](https://ropengov.github.io/retroharmonize/reference/collect_val_labels.md)
   : Collect labels from metadata file
 - [`harmonize_values()`](https://ropengov.github.io/retroharmonize/reference/harmonize_values.md)
-  : Harmonize the values and labels of labelled vectors
+  : Harmonize values and labels of labelled vectors
 - [`harmonize_survey_values()`](https://ropengov.github.io/retroharmonize/reference/harmonize_survey_values.md)
   [`harmonize_waves()`](https://ropengov.github.io/retroharmonize/reference/harmonize_survey_values.md)
   : Harmonize values in surveys
