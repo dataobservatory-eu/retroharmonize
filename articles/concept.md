@@ -413,7 +413,8 @@ million variables. Also able to compare questions across studies and
 series. <https://www.icpsr.umich.edu/sites/icpsr/find-data>
 
 **UK Data Service Variable and Question Bank**: Search hundreds of
-surveys. <https://discover.ukdataservice.ac.uk/variables>
+surveys.
+<https://datacatalogue.ukdataservice.ac.uk/searchresults?sort=2&tab=3>
 
 **Survey Data Netherlands**: Over 36,000 questions to search.
 <https://surveydata.nl>
