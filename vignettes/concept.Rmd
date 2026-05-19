@@ -176,7 +176,7 @@ Also able to compare questions across studies and series.
 
 **UK Data Service Variable and Question Bank**:
 Search hundreds of surveys.
-<https://discover.ukdataservice.ac.uk/variables>
+<https://datacatalogue.ukdataservice.ac.uk/searchresults?sort=2&tab=3>
 
 **Survey Data Netherlands**:
 Over 36,000 questions to search. 

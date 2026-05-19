@@ -30,3 +30,5 @@ logo.png
 ^CRAN-SUBMISSION$
 ^\.positai$
 ^\.claude$
+march.sh
+list.sh

@@ -20,6 +20,13 @@ window to retain the package on CRAN due to an archived dependency.
 - No change in the function API.
 
 ## NOTE 1
+lines wider than 90 characters:
+The >90 character usage line is auto-generated for an exported S3 method with 
+a long class name and cannot be shortened without breaking the public API; 
+a shorter class name would hide the inheritance of this class.
+`retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey` 
+
+## NOTE 2
 
 installed size is  5.7Mb
      sub-directories of 1Mb or more:
@@ -32,9 +39,4 @@ examples are relatively great in size (with permission, we use small subsets of
 actual Eurobarometer surveys.) This makes unit-testing and documenting with 
 vignettes much easier and more realistic for the user.
 
-## NOTE 2
-lines wider than 90 characters:
-The >90 character usage line is auto-generated for an exported S3 method with 
-a long class name and cannot be shortened without breaking the public API; 
-a shorter class name would hide the inheritance of this class.
-retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey 
+

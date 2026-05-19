@@ -47,3 +47,5 @@ data-raw/gesis
 
 # bash files
 *.sh
+march.sh
+list.sh
