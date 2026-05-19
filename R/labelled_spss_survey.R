@@ -52,13 +52,13 @@
 #'
 #' @export
 labelled_spss_survey <- function(
-    x = double(), 
-    labels = NULL,
-    na_values = NULL, 
-    na_range = NULL,
-    label = NULL, 
-    id = NULL, 
-    name_orig = NULL
+  x = double(),
+  labels = NULL,
+  na_values = NULL,
+  na_range = NULL,
+  label = NULL,
+  id = NULL,
+  name_orig = NULL
 ) {
   x_vector <- vctrs::vec_data(x)
   vec_cast_named <- function(x, to, ...) {
@@ -66,16 +66,16 @@ labelled_spss_survey <- function(
     stats::setNames(vctrs::vec_cast(x, to, ...), names(x))
   }
   na_values <- vec_cast_named(na_values, x_vector,
-                              x_arg = "na_values", to_arg = "x"
+    x_arg = "na_values", to_arg = "x"
   )
   labelled <- labelled::labelled(x, labels = labels)
-  
+
   if (is.null(name_orig)) {
     name_orig <- deparse(substitute(x))
   }
-  
+
   if (is.null(id)) id <- name_orig
-  
+
   tmp <- new_labelled_spss_survey(
     vctrs::vec_data(labelled),
     labels = labels,
@@ -85,7 +85,7 @@ labelled_spss_survey <- function(
     id = id,
     name_orig = name_orig
   )
-  
+
   tmp
 }
 
@@ -193,7 +193,7 @@ new_labelled_spss_survey <- function(x,
       abort("`na_range` must be a numeric vector of length two.")
     }
   }
-  
+
   if (is.null(label)) {
     # haven no longer allows NULL labels
     label <- ""
@@ -397,10 +397,9 @@ levels.retroharmonize_labelled_spss_survey <- function(x) {
 #' @rdname labelled_spss_survey
 #' @importFrom haven format_tagged_na
 #' @export
-format.retroharmonize_labelled_spss_survey <- function(x, 
-                                                       ..., 
-                                                       digits = getOption("digits")
-                                                       ) {
+format.retroharmonize_labelled_spss_survey <- function(x,
+                                                       ...,
+                                                       digits = getOption("digits")) {
   if (is.double(x)) {
     haven::format_tagged_na(x, digits = digits)
   } else {
@@ -888,8 +887,7 @@ levels.retroharmonize_labelled_spss_survey <- function(x) {
 #' @export
 format.retroharmonize_labelled_spss_survey <- function(x,
                                                        ...,
-                                                       digits = getOption("digits")
-                                                       ) {
+                                                       digits = getOption("digits")) {
   if (is.double(x)) {
     haven::format_tagged_na(x, digits = digits)
   } else {

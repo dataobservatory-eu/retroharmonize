@@ -37,42 +37,35 @@
 #' @export
 
 concatenate <- function(x, y) {
-  
   validate_concatenate(x, y)
-  
+
   label_x <- attr(x, "label")
   label_y <- attr(y, "label")
-  
+
   if (xor(is.null(label_x), is.null(label_y))) {
-    
     if (is.null(label_x)) {
-      
       attr(x, "label") <- label_y
-      
+
       warning(
         "The variable label of y <",
         label_y,
         "> will be used as variable label."
       )
-      
     } else {
-      
       warning(
         "The variable label of x <",
         label_x,
         "> will be used as variable label."
       )
     }
-    
   } else if (!isTRUE(all.equal(label_x, label_y))) {
-    
     warning(
       "The variable labels are not the same, <",
       label_x,
       "> of x will be used."
     )
   }
-  
+
   joining_attributes(x, y)
 }
 
@@ -131,15 +124,14 @@ validate_concatenate <- function(x, y) {
 
 #' @keywords internal
 joining_attributes <- function(x, y) {
-  
   s1 <- attributes(x)
   s2 <- attributes(y)
-  
+
   same_attributes <- intersect(
     names(s1),
     names(s2)
   )
-  
+
   compare_attributes <- vapply(
     same_attributes,
     function(attr_name) {
@@ -152,11 +144,11 @@ joining_attributes <- function(x, y) {
     },
     logical(1)
   )
-  
+
   matching_arguments <- names(
     compare_attributes[compare_attributes]
   )
-  
+
   c_vector <- structure(
     vctrs::vec_c(
       vctrs::vec_data(x),
@@ -167,18 +159,18 @@ joining_attributes <- function(x, y) {
       attr(y, "id")
     )
   )
-  
+
   for (i in matching_arguments) {
     attr(c_vector, i) <- attr(x, i)
   }
-  
+
   for (x_attr in setdiff(names(s1), names(s2))) {
     attr(c_vector, x_attr) <- attr(x, x_attr)
   }
-  
+
   for (y_attr in setdiff(names(s2), names(s1))) {
     attr(c_vector, y_attr) <- attr(y, y_attr)
   }
-  
+
   c_vector
 }

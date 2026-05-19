@@ -91,12 +91,13 @@
 merge_surveys <- function(survey_list, var_harmonization) {
   validate_survey_list(survey_list)
 
-  if (any(!c("filename", "var_name_orig", "var_name_target", "var_label") %in% 
-          names(var_harmonization))) {
+  if (any(!c("filename", "var_name_orig", "var_name_target", "var_label") %in%
+    names(var_harmonization))) {
     stop(
       "var_harmonization must contain ",
-      paste(c("filename", "var_name_orig", "var_name_target", "var_label"), 
-            collapse = ", "),
+      paste(c("filename", "var_name_orig", "var_name_target", "var_label"),
+        collapse = ", "
+      ),
       "."
     )
   }
@@ -162,7 +163,6 @@ merge_surveys <- function(survey_list, var_harmonization) {
 #' @export
 
 merge_waves <- function(waves, var_harmonization) {
-  
   merge_surveys(
     survey_list = waves,
     var_harmonization = var_harmonization

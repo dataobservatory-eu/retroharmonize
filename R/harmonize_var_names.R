@@ -1,44 +1,85 @@
-#' @title Harmonize the variable names of surveys
+#' Harmonize variable names across surveys
 #'
-#' @description The function harmonizes the variable names of surveys (of class \code{survey}) that
-#' are imported from an external file as a wave.
+#' Harmonize variable names in a list of survey objects using
+#' a metadata crosswalk table.
 #'
-#' @details If the \code{metadata} that contains subsetting information is subsetted, then
-#' it will subset the surveys in
-#' \code{survey_list}.
+#' @description
+#' `harmonize_var_names()` renames variables across multiple
+#' surveys to a shared harmonized naming scheme.
 #'
-#' @param survey_list A list of surveys imported with \code{\link{read_surveys}}
-#' @param metadata A metadata table created by \code{metadata_create} and binded together for
-#' all surveys in \code{survey_list}.
-#' @param old The column name in \code{metadata} that contains the old, not harmonized variable names.
-#' @param new The column name in \code{metadata} that contains the new, harmonized variable names.
-#' @param rowids Rename var labels of original vars \code{rowid} to simply \code{uniqid}?
-#' @importFrom dplyr mutate left_join select inner_join
-#' @importFrom tidyselect all_of
-#' @importFrom rlang set_names
-#' @importFrom assertthat assert_that
-#' @importFrom glue glue
+#' The harmonization rules are defined in a metadata table,
+#' typically created with [metadata_create()].
+#'
+#' @details
+#' The function can also be used for survey subsetting workflows.
+#' If `metadata` contains only a subset of variables for a survey,
+#' only those variables are retained in the harmonized output.
+#'
+#' @param survey_list A list of survey objects, typically imported
+#'   with [read_surveys()].
+#'
+#' @param metadata A metadata table containing harmonization rules.
+#'   Typically created with [metadata_create()] and combined across
+#'   surveys.
+#'
+#' @param old Name of the column in `metadata` containing
+#'   the original variable names.
+#'
+#' @param new Name of the column in `metadata` containing
+#'   the harmonized variable names.
+#'
+#' @param rowids Logical. Should original `rowid` variables
+#'   be renamed to `"uniqid"`?
+#'
+#' @return
+#' A list of surveys with harmonized variable names.
+#'
 #' @family harmonization functions
-#' @return The list of surveys with harmonized variable names.
-#' @examples
-#' examples_dir <- system.file("examples", package = "retroharmonize")
-#' survey_list <- dir(examples_dir)[grepl("\\.rds", dir(examples_dir))]
 #'
-#' example_surveys <- read_surveys(
-#'   file.path(examples_dir, survey_list)
+#' @seealso
+#' [metadata_create()],
+#' [crosswalk()]
+#'
+#' @examples
+#' examples_dir <- system.file(
+#'   "examples",
+#'   package = "retroharmonize"
 #' )
 #'
-#' metadata <- metadata_create(example_surveys)
-#' metadata$var_name_suggested <- label_normalize(metadata$var_name)
-#' metadata$var_name_suggested[metadata$label_orig == "age_education"] <- "age_education"
+#' survey_files <- dir(
+#'   examples_dir,
+#'   pattern = "\\.rds$"
+#' )
 #'
-#' harmonize_var_names(
+#' example_surveys <- read_surveys(
+#'   file.path(examples_dir, survey_files)
+#' )
+#'
+#' metadata <- metadata_create(
+#'   example_surveys
+#' )
+#'
+#' metadata$var_name_suggested <-
+#'   label_normalize(metadata$var_name)
+#'
+#' metadata$var_name_suggested[
+#'   metadata$label_orig == "age_education"
+#' ] <- "age_education"
+#'
+#' harmonized_surveys <- harmonize_var_names(
 #'   survey_list = example_surveys,
 #'   metadata = metadata
 #' )
+#'
+#' harmonized_surveys[[1]]
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr inner_join left_join mutate select
+#' @importFrom glue glue
+#' @importFrom rlang set_names
+#' @importFrom tidyselect all_of
+#'
 #' @export
-#' @seealso crosswalk
-
 
 harmonize_var_names <- function(survey_list,
                                 metadata,
@@ -58,7 +99,11 @@ harmonize_var_names <- function(survey_list,
     this_metadata <- metadata[attr(this_survey, "filename") == metadata$filename, ]
 
     if (!attr(this_survey, "filename") %in% metadata$filename) {
-      warning(glue::glue("The metadata of {attr(this_survey, 'filename')} cannot be found"))
+      warning(
+        glue::glue(
+          "The metadata of {attr(this_survey, 'filename')} cannot be found"
+        )
+      )
     }
 
     renaming <- data.frame(var_name_orig = names(this_survey)) %>%

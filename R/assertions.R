@@ -17,23 +17,30 @@ validate_survey_list <- function(survey_list) {
 
     n_survey <- length(survey_list)
 
-    filenames <- vapply(survey_list, 
-                        function(x) 
-                          attr(x, "filename"), 
-                        character(1))
-    
+    filenames <- vapply(
+      survey_list,
+      function(x) {
+        attr(x, "filename")
+      },
+      character(1)
+    )
+
     ids <- vapply(survey_list, function(x) attr(x, "id"), character(1))
 
     duplicate_ids <- ids[duplicated(ids)]
-    
+
     missing_ids <- vapply(
-      survey_list, function(x) 
-      is.null(attr(x, "id")), 
-      logical(1))
-    
-    missing_filenames <- vapply(survey_list, 
-                                function(x) is.null(attr(x, "filename")), 
-                                logical(1))
+      survey_list, function(x) {
+        is.null(attr(x, "id"))
+      },
+      logical(1)
+    )
+
+    missing_filenames <- vapply(
+      survey_list,
+      function(x) is.null(attr(x, "filename")),
+      logical(1)
+    )
 
     assert_that(!all(missing_ids),
       msg = paste0(paste(which(missing_ids), " have no IDs"))
@@ -85,17 +92,22 @@ validate_survey_list <- function(survey_list) {
 #' @importFrom fs file_exists
 #' @keywords internal
 validate_survey_files <- function(survey_files) {
-  
-  existing_survey_files <- vapply(survey_files, 
-                                  fs::file_exists, 
-                                  logical(1))
+  existing_survey_files <- vapply(
+    survey_files,
+    fs::file_exists,
+    logical(1)
+  )
   not_existing_survey_files <- existing_survey_files[
-    existing_survey_files == FALSE]
+    existing_survey_files == FALSE
+  ]
 
   if (length(not_existing_survey_files) > 0) {
-    error_msg <- paste0("the following files were not found :", 
-                        paste(names(not_existing_survey_files), 
-                              collapse = ", "))
+    error_msg <- paste0(
+      "the following files were not found :",
+      paste(names(not_existing_survey_files),
+        collapse = ", "
+      )
+    )
     stop("Error in validate_survey_files() -  ", error_msg)
   }
 
@@ -138,9 +150,11 @@ validate_harmonize_labels <- function(harmonize_labels) {
     list_length <- as.numeric(vapply(c("from", "numeric_values", "to"), function(x) length(harmonize_labels[[x]]), numeric(1)))
 
     assertthat::assert_that(
-      all(vapply(list_length, 
-                 function(x) list_length[[1]] == x, 
-                 logical(1))),
+      all(vapply(
+        list_length,
+        function(x) list_length[[1]] == x,
+        logical(1)
+      )),
       msg = "<harmonize_label> must have <from>, <to>, <numeric_values> of equal lengths."
     )
   } else {

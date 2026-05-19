@@ -1,5 +1,4 @@
 test_that("document_survey_item preserves variable name history", {
-  
   var1 <- labelled::labelled_spss(
     x = c(1, 0, 1, 1, 0, 8, 9),
     labels = c(
@@ -10,7 +9,7 @@ test_that("document_survey_item preserves variable name history", {
     ),
     na_values = c(8, 9)
   )
-  
+
   var2 <- labelled::labelled_spss(
     x = c(2, 2, 8, 9, 1, 1),
     labels = c(
@@ -21,7 +20,7 @@ test_that("document_survey_item preserves variable name history", {
     ),
     na_values = c(8, 9)
   )
-  
+
   harmonization <- list(
     from = c(
       "^tend\\sto|^trust",
@@ -37,12 +36,12 @@ test_that("document_survey_item preserves variable name history", {
     ),
     numeric_values = c(1, 0, 99997, 99999)
   )
-  
+
   missing_values <- c(
     "do_not_know" = 99997,
     "inap" = 99999
   )
-  
+
   h1 <- harmonize_values(
     x = var1,
     harmonize_label = "Do you trust the European Union?",
@@ -50,7 +49,7 @@ test_that("document_survey_item preserves variable name history", {
     na_values = missing_values,
     id = "survey1"
   )
-  
+
   h2 <- harmonize_values(
     x = var2,
     harmonize_label = "Do you trust the European Union?",
@@ -58,11 +57,11 @@ test_that("document_survey_item preserves variable name history", {
     na_values = missing_values,
     id = "survey2"
   )
-  
+
   h3 <- concatenate(h1, h2)
-  
+
   documented <- document_survey_item(h3)
-  
+
   expect_equal(
     documented$history_var_name,
     c(

@@ -96,10 +96,12 @@ create_codebook <- function(metadata = NULL,
   }
 
 
-  metadata$label_type <- vapply(metadata$labels,
-                                function(x) class(x)[1], 
-                                character(1))
-  
+  metadata$label_type <- vapply(
+    metadata$labels,
+    function(x) class(x)[1],
+    character(1)
+  )
+
   metadata$label_type <- ifelse(
     test = is.na(metadata$valid_labels) & is.na(metadata$na_labels),
     yes  = "not_labelled",
@@ -328,15 +330,18 @@ codebook_surveys_create <- function(survey_list) {
     msg = "The parameter waves must be a list (of surveys.)"
   )
 
-  assertthat::assert_that(all(unlist(lapply(survey_list, 
-                                            function(x) inherits(x, "survey")
-                                            ))),
+  assertthat::assert_that(
+    all(unlist(lapply(
+      survey_list,
+      function(x) inherits(x, "survey")
+    ))),
     msg = "Every elements of the wave list must be of type survey."
   )
 
-  codebook_list <- lapply(survey_list, 
-                          function(x) create_codebook(survey = x)
-                          )
+  codebook_list <- lapply(
+    survey_list,
+    function(x) create_codebook(survey = x)
+  )
 
   do.call(rbind, codebook_list)
 }

@@ -1,40 +1,85 @@
-#' @title Harmonize the values and labels of labelled vectors
-#' @description Create a labelled vector with harmonized numeric coding and
-#' value labels.
-#' @details Create a labelled vector that contains in its metadata attributes
-#' the original labelling, the original numeric coding and the current
-#' labelling, with the numerical values representing the harmonized
-#' coding.
-#' @param x A labelled vector
-#' @param harmonize_label A character vector of 1L containing the new,
-#' harmonize variable label. Defaults to \code{NULL}, in which case
-#' it uses the variable label of \code{x}, unless it is also \code{NULL}.
-#' @param harmonize_labels A list of harmonization values
-#' @param na_values A named vector of \code{na_values}, the
-#' observations that are defined to be treated as missing in
-#' the SPSS-style coding.
-#' @param na_range A min, max range of  \code{na_range}, the
-#' continuous missing value range. In most surveys this should be left
-#' \code{NULL}.
-#' @param  name_orig The original name of the variable. If left \code{NULL}
-#' it uses the latest name of the object \code{x}.
-#' @param id A survey ID, defaults to \code{survey_id}
-#' @param remove Defaults to \code{NULL}.  A character or regex that will be removed from all
-#' old value labels, like \code{"\\("|\\)} for ( and ).
-#' @param perl Use perl-like regex? Defaults to \code{FALSE}.
-#' @importFrom labelled to_character labelled na_values val_labels
-#' @importFrom labelled var_label
-#' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr mutate left_join distinct select if_else
-#' @importFrom tidyselect all_of
-#' @importFrom haven labelled_spss
-#' @importFrom assertthat assert_that
-#' @importFrom rlang set_names .data
+#' Harmonize values and labels of labelled vectors
+#'
+#' Create a harmonized labelled vector with standardized value labels,
+#' numeric coding, and missing value definitions.
+#'
+#' @description
+#' `harmonize_values()` converts heterogeneous labelled survey vectors
+#' into a harmonized representation suitable for cross-survey integration.
+#'
+#' The function:
+#'
+#' - harmonizes value labels using regex-based matching;
+#' - assigns harmonized numeric codes;
+#' - preserves original coding metadata;
+#' - standardizes user-defined missing values;
+#' - preserves SPSS-style labelled metadata;
+#' - and records provenance attributes.
+#'
+#' @details
+#' Harmonization is performed using a harmonization table supplied via
+#' `harmonize_labels`.
+#'
+#' The harmonization table must contain:
+#'
+#' - `from`: regex patterns matching original labels;
+#' - `to`: harmonized labels;
+#' - `numeric_values`: harmonized numeric codes.
+#'
+#' Original labels and numeric codes are preserved in attributes
+#' attached to the returned vector.
+#'
+#' If no harmonization table is supplied, the function still attempts
+#' to normalize common missing value labels such as:
+#'
+#' - `"inap"`
+#' - `"declined"`
+#' - `"do_not_know"`
+#'
+#' @param x A labelled vector, typically of class
+#'   `"haven_labelled"` or `"haven_labelled_spss"`.
+#'
+#' @param harmonize_label Optional harmonized variable label.
+#'   Defaults to the original variable label.
+#'
+#' @param harmonize_labels A list describing harmonization rules.
+#'   Must contain the elements:
+#'
+#'   - `from`
+#'   - `to`
+#'   - `numeric_values`
+#'
+#' @param na_values Named numeric vector defining harmonized
+#'   missing value codes.
+#'
+#' @param na_range Optional SPSS-style missing value range.
+#'   Usually left `NULL`.
+#'
+#' @param id Survey identifier.
+#'   Defaults to `"survey_id"`.
+#'
+#' @param name_orig Optional original variable name.
+#'   Defaults to the object name supplied to `x`.
+#'
+#' @param remove Optional regex pattern removed from original labels
+#'   before harmonization.
+#'
+#' @param perl Logical. Use Perl-compatible regular expressions?
+#'   Defaults to `FALSE`.
+#'
+#' @return
+#' A harmonized `haven_labelled_spss` vector.
+#'
+#' The returned vector preserves:
+#'
+#' - harmonized value labels;
+#' - harmonized numeric coding;
+#' - SPSS missing value metadata;
+#' - original coding metadata;
+#' - survey provenance metadata.
+#'
 #' @family harmonization functions
-#' @return A labelled vector that contains in its metadata attributes
-#' the original labelling, the original numeric coding and the current
-#' labelling, with the numerical values representing the harmonized
-#' coding.
+#'
 #' @examples
 #' var1 <- labelled::labelled_spss(
 #'   x = c(1, 0, 1, 1, 0, 8, 9),
@@ -50,9 +95,24 @@
 #' harmonize_values(
 #'   var1,
 #'   harmonize_labels = list(
-#'     from = c("^tend\\sto|^trust", "^tend\\snot|not\\strust", "^dk|^don", "^inap"),
-#'     to = c("trust", "not_trust", "do_not_know", "inap"),
-#'     numeric_values = c(1, 0, 99997, 99999)
+#'     from = c(
+#'       "^tend\\sto|^trust",
+#'       "^tend\\snot|not\\strust",
+#'       "^dk|^don",
+#'       "^inap"
+#'     ),
+#'     to = c(
+#'       "trust",
+#'       "not_trust",
+#'       "do_not_know",
+#'       "inap"
+#'     ),
+#'     numeric_values = c(
+#'       1,
+#'       0,
+#'       99997,
+#'       99999
+#'     )
 #'   ),
 #'   na_values = c(
 #'     "do_not_know" = 99997,
@@ -60,8 +120,21 @@
 #'   ),
 #'   id = "survey_id"
 #' )
+#'
+#' @seealso
+#' [harmonize_var_names()]
+#'
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr arrange distinct distinct_all filter if_else
+#' @importFrom dplyr left_join mutate select
+#' @importFrom haven labelled_spss
+#' @importFrom labelled labelled na_range na_values
+#' @importFrom labelled to_character val_labels var_label
+#' @importFrom rlang .data set_names
+#' @importFrom tibble as_tibble tibble
+#' @importFrom tidyselect all_of
+#'
 #' @export
-#' @family harmonization functions
 
 harmonize_values <- function(
   x,

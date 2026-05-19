@@ -2,7 +2,7 @@
 % Please edit documentation in R/harmonize_var_names.R
 \name{harmonize_var_names}
 \alias{harmonize_var_names}
-\title{Harmonize the variable names of surveys}
+\title{Harmonize variable names across surveys}
 \usage{
 harmonize_var_names(
   survey_list,
@@ -13,48 +13,78 @@ harmonize_var_names(
 )
 }
 \arguments{
-\item{survey_list}{A list of surveys imported with \code{\link{read_surveys}}}
+\item{survey_list}{A list of survey objects, typically imported
+with [read_surveys()].}
 
-\item{metadata}{A metadata table created by \code{metadata_create} and binded together for
-all surveys in \code{survey_list}.}
+\item{metadata}{A metadata table containing harmonization rules.
+Typically created with [metadata_create()] and combined across
+surveys.}
 
-\item{old}{The column name in \code{metadata} that contains the old, not harmonized variable names.}
+\item{old}{Name of the column in `metadata` containing
+the original variable names.}
 
-\item{new}{The column name in \code{metadata} that contains the new, harmonized variable names.}
+\item{new}{Name of the column in `metadata` containing
+the harmonized variable names.}
 
-\item{rowids}{Rename var labels of original vars \code{rowid} to simply \code{uniqid}?}
+\item{rowids}{Logical. Should original `rowid` variables
+be renamed to `"uniqid"`?}
 }
 \value{
-The list of surveys with harmonized variable names.
+A list of surveys with harmonized variable names.
 }
 \description{
-The function harmonizes the variable names of surveys (of class \code{survey}) that
-are imported from an external file as a wave.
+`harmonize_var_names()` renames variables across multiple
+surveys to a shared harmonized naming scheme.
+
+The harmonization rules are defined in a metadata table,
+typically created with [metadata_create()].
 }
 \details{
-If the \code{metadata} that contains subsetting information is subsetted, then
-it will subset the surveys in
-\code{survey_list}.
+Harmonize variable names in a list of survey objects using
+a metadata crosswalk table.
+
+
+The function can also be used for survey subsetting workflows.
+If `metadata` contains only a subset of variables for a survey,
+only those variables are retained in the harmonized output.
 }
 \examples{
-examples_dir <- system.file("examples", package = "retroharmonize")
-survey_list <- dir(examples_dir)[grepl("\\\\.rds", dir(examples_dir))]
-
-example_surveys <- read_surveys(
-  file.path(examples_dir, survey_list)
+examples_dir <- system.file(
+  "examples",
+  package = "retroharmonize"
 )
 
-metadata <- metadata_create(example_surveys)
-metadata$var_name_suggested <- label_normalize(metadata$var_name)
-metadata$var_name_suggested[metadata$label_orig == "age_education"] <- "age_education"
+survey_files <- dir(
+  examples_dir,
+  pattern = "\\\\.rds$"
+)
 
-harmonize_var_names(
+example_surveys <- read_surveys(
+  file.path(examples_dir, survey_files)
+)
+
+metadata <- metadata_create(
+  example_surveys
+)
+
+metadata$var_name_suggested <-
+  label_normalize(metadata$var_name)
+
+metadata$var_name_suggested[
+  metadata$label_orig == "age_education"
+] <- "age_education"
+
+harmonized_surveys <- harmonize_var_names(
   survey_list = example_surveys,
   metadata = metadata
 )
+
+harmonized_surveys[[1]]
+
 }
 \seealso{
-crosswalk
+[metadata_create()],
+[crosswalk()]
 
 Other harmonization functions:
 \code{\link[=collect_val_labels]{collect_val_labels()}},
