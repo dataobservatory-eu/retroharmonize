@@ -1,7 +1,12 @@
 # Retrieve a survey from a survey list
 
-Extract a single survey object from a list of surveys using either its
-survey identifier or source file name.
+\`pull_survey()\` retrieves a survey object from a list created with
+\[read_surveys()\].
+
+Surveys can be selected using:
+
+\- the survey identifier stored in the \`"id"\` attribute, or - the
+original source file name stored in the \`"filename"\` attribute.
 
 ## Usage
 
@@ -17,11 +22,11 @@ pull_survey(survey_list, id = NULL, filename = NULL)
 
 - id:
 
-  Optional survey identifier stored in the \`"id"\` attribute.
+  Optional survey identifier.
 
 - filename:
 
-  Optional source file name stored in the \`"filename"\` attribute.
+  Optional source file name.
 
 ## Value
 
@@ -29,14 +34,19 @@ A single \`survey\` object.
 
 ## Details
 
+Extract a single \`survey\` object from a list of surveys using either
+its survey identifier or source file name.
+
 Either \`id\` or \`filename\` must be supplied.
 
 The function throws an error if:
 
-\- neither identifier is provided, - the requested survey is not
-found, - or multiple surveys match the query.
+\- neither argument is provided; - the requested survey cannot be
+found; - or multiple surveys match the query.
 
 ## See also
+
+\[read_surveys()\]
 
 Other import functions:
 [`harmonize_survey_variables()`](https://ropengov.github.io/retroharmonize/reference/harmonize_survey_variables.md),
@@ -54,13 +64,13 @@ examples_dir <- system.file(
   package = "retroharmonize"
 )
 
-my_rds_files <- dir(examples_dir)[grepl(
-  "\\.rds$",
-  dir(examples_dir)
-)]
+survey_files <- dir(
+  examples_dir,
+  pattern = "\\.rds$"
+)
 
 example_surveys <- read_surveys(
-  file.path(examples_dir, my_rds_files)
+  file.path(examples_dir, survey_files)
 )
 
 pull_survey(
