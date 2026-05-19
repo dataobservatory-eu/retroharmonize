@@ -1,0 +1,312 @@
+# The labelled_spss_survey class
+
+Large international survey programs that provide data access to their
+data, such as the aforementioned Eurobarometer, Afrobarometer and Arab
+Barometer, or the European Values Survey, or Lationbarometro usually
+give access to the data in SPSS files. In some cases, Stata files are
+available, too. Our examples always start with SPSS files.
+
+In R, the [haven](https://haven.tidyverse.org/) package provides
+functions to import and export data to and from IBM’s proprietary SPSS
+files. We had to realize that while
+[haven::read_spss](https://haven.tidyverse.org/reference/read_spss.html)
+works perfectly with importing the data and metadata of a single survey,
+it is not always suitable for multiple survey files, for two important
+reasons. SPSS files contain the survey data in a coded form, with the
+coding (labelling) metadata optionally included to each variable.
+
+1.  Variables imported with inconsistent labelling cannot always be
+    concatenated. For example, unlabelled age variables are imported to
+    an R numeric vector, whilst when the age 18 is labelled *18 years*
+    or *18 éves*, it is imported to a labelled class.
+
+2.  The SPSS variables do not handle various missing cases in a complete
+    and unambiguous form. In an age variable, *998* and *999* may be
+    labelled as *not asked* and *declined to answer*, or simply the
+    numerical range between 120-999 may be marked as a range of numeric
+    values representing missing cases.
+
+One practical problem in the Eurobarometer surveys, which targets the
+population of at least 15 years old Europeans is that in some standard
+questions, such as the age of finishing full-time education, 10
+represents a special missing value, whilst in other surveys it may be a
+perfectly valid numerical answer. The real coding problem is that SPSS
+users can freely chose to use explicit labelling of missing cases, using
+a numerical range for missing cases, or not providing any missing case
+metadata at all.
+
+Our importing functions rely on two new S3 classes. A single survey is
+imported into a
+[`survey()`](https://ropengov.github.io/retroharmonize/reference/survey.md)
+class, which inherits all the properties of a modern data frame, i.e.,
+it is a `tibble` or `tbl_df` from
+[tibble](https://tibble.tidyverse.org/) in the tidyverse, but it
+includes as much metadata from the original SPSS file as possible. These
+metadata attributes are handled in a way that they can facilitate proper
+documentation and a reproducible workflow. Furthermore, it converts
+labelled variables into the *retroharmonize_labelled_spss* class
+inherited from
+[haven::labelled_spss](https://haven.tidyverse.org/reference/labelled_spss.html)
+with more consistent handling of missing value ranges and labels. See
+[`?labelled_spss_survey`](https://ropengov.github.io/retroharmonize/reference/labelled_spss_survey.md).
+
+Working with our new *retroharmonize_labelled_spss class* can be very
+cumbersome, particularly with simple harmonization tasks. In the case of
+harmonizing a single question from two surveys, this may not be
+practical, and a simple crosswalk table can help with spotting and
+correcting inconsistent codes.
+
+Our survey objects or retroharmonize_labelled_spss vectors can be
+converted to base R classes with the
+[`as_numeric()`](https://ropengov.github.io/retroharmonize/reference/labelled_spss_survey_coercion.md),
+`as_factor(`) or
+[`as_character()`](https://ropengov.github.io/retroharmonize/reference/labelled_spss_survey_coercion.md)
+methods. When computing a numerical average, the special age value of 10
+is converted to `NA_real`\_ as a numeric. In other statistical
+applications, missing and special values are best represented as
+categories—this calls for the factor representation. The character
+representation is often more useful for visualizing the data then the
+factor representation.
+
+## Create A labelled_spss_survey Vector
+
+``` r
+
+library(retroharmonize)
+```
+
+Use the
+[`labelled_spss_survey()`](https://ropengov.github.io/retroharmonize/reference/labelled_spss_survey.md)
+helper function to create vectors of class
+*retroharmonize_labelled_spss_survey*.
+
+``` r
+
+sl1 <- labelled_spss_survey(
+  x = c(1, 1, 0, 8, 8, 8),
+  labels = c(
+    "yes" = 1,
+    "no" = 0,
+    "declined" = 8
+  ),
+  label = "Do you agree?",
+  na_values = 8,
+  id = "survey1"
+)
+
+print(sl1)
+#> <labelled_spss_survey<double>[6]>: Do you agree?
+#> 1 1 0 8 8 8
+#> Missing values: 8
+#> See all attributes survey1_name, survey1_values, survey1_label [...], survey1_na_values with attributes(x)
+```
+
+You can check the type:
+
+``` r
+
+is.labelled_spss_survey(sl1)
+#> [1] TRUE
+```
+
+The
+[`labelled_spss_survey()`](https://ropengov.github.io/retroharmonize/reference/labelled_spss_survey.md)
+class inherits some properties from
+[`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html),
+which can be manipulated by the `labelled` package (See particularly the
+vignette *Introduction to labelled* by Joseph Larmarange.)
+
+``` r
+
+haven::is.labelled(sl1)
+#> [1] TRUE
+```
+
+``` r
+
+labelled::val_labels(sl1)
+#>      yes       no declined 
+#>        1        0        8
+```
+
+``` r
+
+labelled::na_values(sl1)
+#> [1] 8
+```
+
+It can also be subsetted:
+
+``` r
+
+sl1[3:4]
+#> <labelled_spss_survey<double>[2]>: Do you agree?
+#> 0 8
+#> Missing values: 8
+#> See all attributes survey1_name, survey1_values, survey1_label [...], survey1_na_values with attributes(x)
+```
+
+When used within the modernized version of *data.frame*,
+[`tibble::tibble()`](https://tibble.tidyverse.org/reference/tibble.html),
+the summary of the variable content prints in an informative way.
+
+``` r
+
+df <- tibble::tibble(v1 = sl1)
+## Use tibble instead of data.frame(v1=sl1) ...
+print(df)
+#> # A tibble: 6 × 1
+#>   v1               
+#>   <retroh_dbl>     
+#> 1 1 [yes]          
+#> 2 1 [yes]          
+#> 3 0 [no]           
+#> 4 8 (NA) [declined]
+#> 5 8 (NA) [declined]
+#> 6 8 (NA) [declined]
+## ... which inherits the methods of a data.frame
+subset(df, v1 == 1)
+#> # A tibble: 2 × 1
+#>   v1          
+#>   <retroh_dbl>
+#> 1 1 [yes]     
+#> 2 1 [yes]
+```
+
+## Coercion rules and type casting
+
+To avoid any confusion with mis-labelled surveys, coercion with double
+or integer vectors will result in a double or integer vector. The use of
+[`vctrs::vec_c`](https://vctrs.r-lib.org/reference/vec_c.html) is
+generally safer than base R [`c()`](https://rdrr.io/r/base/c.html).
+
+``` r
+
+# double
+c(sl1, 1 / 7)
+#> [1] 1.0000000 1.0000000 0.0000000 8.0000000 8.0000000 8.0000000 0.1428571
+vctrs::vec_c(sl1, 1 / 7)
+#> [1] 1.0000000 1.0000000 0.0000000 8.0000000 8.0000000 8.0000000 0.1428571
+```
+
+``` r
+
+c(sl1, 1:3)
+#> [1] 1 1 0 8 8 8 1 2 3
+```
+
+Conversion to character works as expected:
+
+``` r
+
+as.character(sl1)
+#> [1] "1" "1" "0" "8" "8" "8"
+```
+
+The base `as.factor` converts to integer and uses the integers as
+levels, because base R factors are integers with a `levels` attribute.
+
+``` r
+
+as.factor(sl1)
+#> [1] 1 1 0 8 8 8
+#> Levels: 0 1 8
+```
+
+Conversion to factor with `as_factor` converts the value labels to
+factor levels:
+
+``` r
+
+as_factor(sl1)
+#> [1] yes      yes      no       declined declined declined
+#> attr(,"label")
+#> [1] Do you agree?
+#> Levels: no yes declined
+```
+
+Similarly, when converting to numeric types, we have to convert the
+user-defined missing values to `NA` values used in the R language. For
+numerical analysis, convert with `as_numeric`.
+
+``` r
+
+as.numeric(sl1)
+#> [1] 1 1 0 8 8 8
+as_numeric(sl1)
+#> [1]  1  1  0 NA NA NA
+```
+
+## Arithmetics
+
+The median value is correctly displayed, because user-defined missing
+values are removed from the calculation. Only a few arithmetic methods
+are implemented, such as
+
+- median()
+
+``` r
+
+median(as.numeric(sl1))
+#> [1] 4.5
+median(sl1)
+#> [1] 1
+```
+
+- quantile()
+
+``` r
+
+quantile(as.numeric(sl1), 0.9)
+#> 90% 
+#>   8
+quantile(sl1, 0.9)
+#> 90% 
+#>   1
+```
+
+- mean()
+
+``` r
+
+mean(as.numeric(sl1))
+#> [1] 4.333333
+mean(sl1)
+#> [1] NA
+mean(sl1, na.rm = TRUE)
+#> [1] 0.6666667
+```
+
+- weighted.mean() - always removes NA values.
+
+``` r
+
+weights1 <- runif(n = 6, min = 0, max = 1)
+weighted.mean(as.numeric(sl1), weights1)
+#> [1] 2.777608
+weighted.mean(sl1, weights1)
+#> [1] 0.603679
+```
+
+- sum()
+
+``` r
+
+sum(as.numeric(sl1))
+#> [1] 26
+sum(sl1, na.rm = TRUE)
+#> [1] 2
+```
+
+The result of the conversion to numeric can be used for other
+mathematical / statistical function.
+
+``` r
+
+as_numeric(sl1)
+#> [1]  1  1  0 NA NA NA
+min(as_numeric(sl1))
+#> [1] NA
+min(as_numeric(sl1), na.rm = TRUE)
+#> [1] 0
+```
