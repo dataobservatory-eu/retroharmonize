@@ -27,9 +27,6 @@ vec_cast(x, to, ...)
 
 # S3 method for class 'character.retroharmonize_labelled_spss_survey'
 vec_cast(x, to, ...)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey'
-vec_ptype2(x, y, ..., x_arg = "", y_arg = "")
 ```
 
 ## Details

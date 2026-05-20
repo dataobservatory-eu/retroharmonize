@@ -10,9 +10,6 @@ but I am sure it has a more general RDF definition.)
 ``` r
 
 library(retroharmonize)
-#> Warning: S3 methods 'vec_cast.retroharmonize_labelled_spss_survey',
-#> 'vec_ptype2.retroharmonize_labelled_spss_survey' were declared in NAMESPACE but
-#> not found
 library(statcodelists)
 library(dplyr)
 library(knitr)

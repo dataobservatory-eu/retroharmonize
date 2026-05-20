@@ -73,9 +73,6 @@ factor representation.
 ``` r
 
 library(retroharmonize)
-#> Warning: S3 methods 'vec_cast.retroharmonize_labelled_spss_survey',
-#> 'vec_ptype2.retroharmonize_labelled_spss_survey' were declared in NAMESPACE but
-#> not found
 ```
 
 Use the
