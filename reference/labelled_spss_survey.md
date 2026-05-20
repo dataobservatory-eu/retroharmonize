@@ -90,6 +90,10 @@ sum(x, ...)
 
   Original variable name. Defaults to the name of \`x\`.
 
+- i:
+
+  Index vector used for subsetting.
+
 - object:
 
   A labelled_spss_survey to summarize.
