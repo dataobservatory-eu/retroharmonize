@@ -6,11 +6,11 @@ Local:
 r_hub:
 * various platforms, mac, Windows, Ubuntu, Fedora.
 
-0 errors ✔ | 0 warnings ✔ | 2 notes 
+0 errors ✔ | 0 warnings ✔ | 1 note
 
 ## Resubmission
 
-Version 0.2.8 is a resubmission of 0.2.7.
+Version 0.2.8 is a resubmission of 0.2.7. 
 
 The package had previously been archived because dependency dataset
 was temporarily archived from CRAN:
@@ -20,18 +20,9 @@ was temporarily archived from CRAN:
 
 The dependency dataset has since returned to CRAN and all checks now pass.
 
-### Notes
-Automatically generated Rd usage lines for certain vctrs
-double-dispatch S3 methods exceed 90 characters. This is due to
-standard vctrs method naming conventions and does not affect
-package functionality.
-
-Installed size is 5.7 MB.
-
-Subdirectories larger than 1 MB:
-
-doc 1.1 MB
-examples 1.9 MB
+## Notes
+- Installed size is 5.7 MB. Subdirectories larger than 1 MB: 
+   doc 1.1 MB examples 1.9 MB
 
 The package contains small, permission-cleared subsets of real survey
 datasets used for examples, testing, and vignettes. These datasets are
@@ -39,3 +30,7 @@ necessary to demonstrate realistic harmonization workflows, and had been
 on CRAN for 6 years.
 
 
+- Automatically generated Rd usage lines for certain vctrs
+double-dispatch S3 methods results in long lines. This is due to
+standard vctrs method naming conventions and does not affect
+package functionality.
