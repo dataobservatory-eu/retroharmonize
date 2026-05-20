@@ -20,6 +20,9 @@ vec_ptype2(x, y, ...)
 # S3 method for class 'integer.retroharmonize_labelled_spss_survey'
 vec_ptype2(x, y, ...)
 
+# S3 method for class 'retroharmonize_labelled_spss_survey.integer'
+vec_ptype2(x, y, ...)
+
 # S3 method for class 'double.retroharmonize_labelled_spss_survey'
 vec_cast(x, to, ...)
 
@@ -41,6 +44,9 @@ vec_ptype2(x, y, ...)
 # S3 method for class 'integer.retroharmonize_labelled_spss_survey'
 vec_ptype2(x, y, ...)
 
+# S3 method for class 'retroharmonize_labelled_spss_survey.integer'
+vec_ptype2(x, y, ...)
+
 # S3 method for class 'double.retroharmonize_labelled_spss_survey'
 vec_cast(x, to, ...)
 
@@ -50,8 +56,11 @@ vec_cast(x, to, ...)
 # S3 method for class 'character.retroharmonize_labelled_spss_survey'
 vec_cast(x, to, ...)
 
-# S3 method for class 'retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey'
+# S3 method for class 'retroharmonize_labelled_spss_survey'
 vec_ptype2(x, y, ..., x_arg = "", y_arg = "")
+
+# S3 method for class 'retroharmonize_labelled_spss_survey'
+vec_cast(x, to, ..., x_arg = "", to_arg = "")
 ```
 
 ## Details
