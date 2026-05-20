@@ -82,17 +82,19 @@ crosswalk_surveys <- function(crosswalk_table,
   # ------------------------------------------------------------------
   # 1. Keep only surveys referenced in the crosswalk table
   # ------------------------------------------------------------------
-  survey_ids <- vapply(survey_list, 
-                       function(x) attr(x, "id"), 
-                       character(1)
-                       )
-  
+  survey_ids <- vapply(
+    survey_list,
+    function(x) attr(x, "id"),
+    character(1)
+  )
+
   keep <- survey_ids %in% unique(crosswalk_table$id)
   survey_list <- survey_list[keep]
 
   if (length(survey_list) == 0) {
-    stop("No surveys match IDs found in the crosswalk table.", 
-         call. = FALSE)
+    stop("No surveys match IDs found in the crosswalk table.",
+      call. = FALSE
+    )
   }
 
   # ------------------------------------------------------------------
@@ -172,8 +174,10 @@ crosswalk_surveys <- function(crosswalk_table,
     selection <- crosswalk_table %>%
       dplyr::filter(id == survey_id)
 
-    if (all(c("val_label_orig", "val_label_target", 
-              "val_numeric_target") %in%
+    if (all(c(
+      "val_label_orig", "val_label_target",
+      "val_numeric_target"
+    ) %in%
       names(selection))) {
       survey <- relabel_survey(survey, selection)
     }
@@ -202,18 +206,26 @@ crosswalk_surveys <- function(crosswalk_table,
   # ------------------------------------------------------------------
   # 5. Apply safely to all surveys
   # ------------------------------------------------------------------
-  results <- purrr::map(harmonized_surveys, 
-                        purrr::safely(harmonize_one_survey)
-                        )
+  results <- purrr::map(
+    harmonized_surveys,
+    purrr::safely(harmonize_one_survey)
+  )
 
-  errors <- purrr::map_chr(results, 
-                           ~ if (is.null(.x$error)) "" 
-                           else .x$error$message)
+  errors <- purrr::map_chr(
+    results,
+    ~ if (is.null(.x$error)) {
+      ""
+    } else {
+      .x$error$message
+    }
+  )
 
   if (any(errors != "")) {
     error_table <- tibble::tibble(
-      id = vapply(harmonized_surveys, 
-                  function(x) attr(x, "id"), character(1)),
+      id = vapply(
+        harmonized_surveys,
+        function(x) attr(x, "id"), character(1)
+      ),
       error = errors
     )
 
@@ -261,7 +273,7 @@ is.crosswalk_table <- function(ctable) {
     length(duplicates) == 0,
     msg = glue(
       "The crosstable '{deparse(substitute(ctable))}' has the following non-unique target variables: {error_msg}."
-      )
+    )
   )
 }
 
