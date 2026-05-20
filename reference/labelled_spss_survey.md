@@ -6,6 +6,9 @@ carries additional survey-level provenance metadata.
 ## Usage
 
 ``` r
+# S3 method for class 'retroharmonize_labelled_spss_survey'
+print(x, ...)
+
 labelled_spss_survey(
   x = double(),
   labels = NULL,
@@ -20,42 +23,16 @@ labelled_spss_survey(
 x[i, ...]
 
 # S3 method for class 'retroharmonize_labelled_spss_survey'
-x[i, ...]
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-print(x, ...)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
 summary(object, ...)
+
+# S3 method for class 'retroharmonize_labelled_spss_survey'
+names(x) <- value
 
 # S3 method for class 'retroharmonize_labelled_spss_survey'
 is.na(x)
 
 # S3 method for class 'retroharmonize_labelled_spss_survey'
 levels(x)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-names(x) <- value
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-format(x, ..., digits = getOption("digits"))
-
-is.labelled_spss_survey(x)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-print(x, ...)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-summary(object, ...)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-is.na(x)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-levels(x)
-
-# S3 method for class 'retroharmonize_labelled_spss_survey'
-names(x) <- value
 
 # S3 method for class 'retroharmonize_labelled_spss_survey'
 format(x, ..., digits = getOption("digits"))
@@ -84,6 +61,11 @@ sum(x, ...)
 
   A vector of values.
 
+- ...:
+
+  potentially further arguments for methods; not used in the default
+  method.
+
 - labels:
 
   A named vector of value labels.
@@ -107,15 +89,6 @@ sum(x, ...)
 - name_orig:
 
   Original variable name. Defaults to the name of \`x\`.
-
-- i:
-
-  Index vector used for subsetting.
-
-- ...:
-
-  potentially further arguments for methods; not used in the default
-  method.
 
 - object:
 
@@ -155,17 +128,17 @@ An object of class \`"retroharmonize_labelled_spss_survey"\`, extending
 The resulting object behaves like a \`haven_labelled_spss\` vector, but
 stores:
 
-- a survey identifier
+- a survey identifier;
 
-- the original variable name
+- the original variable name;
 
-- the original value coding
+- the original value coding.
 
-Several arithmetic (statistical summary) methods operate on the numeric
-representation of labelled survey vectors, converting SPSS-style missing
-values to \`NA\` before computation.
+Several arithmetic and statistical summary methods operate on the
+numeric representation of labelled survey vectors, converting SPSS-style
+missing values to \`NA\` before computation.
 
-You can coerce labelled_spss_survey vectors to numeric, character or
+You can coerce \`labelled_spss_survey\` vectors to numeric, character or
 factor representation.
 
 ## See also
