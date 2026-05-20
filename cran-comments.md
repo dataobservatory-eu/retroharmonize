@@ -14,10 +14,11 @@ There are two NOTES:
 - The 0.2.8 is a resubmission of 0.2.7 that was offered out of the time
 window to retain the package on CRAN due to an archived dependency.
 
-- Dependencies were modernised. Unit test were updated, extended, and some small 
-(earlier not flagged) edge cases better handled.
-
-- No change in the function API.
+## NOTE 1
+X-CRAN-Comment: Archived on 2026-01-30 as requires archived package
+    'dataset'.
+    
+`dataset` is on CRAN again. 
 
 ## NOTE 1
 lines wider than 90 characters:
@@ -26,7 +27,7 @@ a long class name and cannot be shortened without breaking the public API;
 a shorter class name would hide the inheritance of this class.
 `retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey` 
 
-## NOTE 2
+## NOTE 3
 
 installed size is  5.7Mb
      sub-directories of 1Mb or more:
