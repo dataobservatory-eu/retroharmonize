@@ -81,7 +81,10 @@ Eurobarometer surveys with a few variables and a limited set of
 responses. They are not as interesting as the full datasets – they serve
 testing and illustration purposes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://retroharmonize.dataobservatory.eu/" class="external-link">retroharmonize</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://retroharmonize.dataobservatory.eu/" class="external-link">retroharmonize</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: S3 methods 'vec_cast.retroharmonize_labelled_spss_survey',</span></span>
+<span><span class="co">#&gt; 'vec_ptype2.retroharmonize_labelled_spss_survey' were declared in NAMESPACE but</span></span>
+<span><span class="co">#&gt; not found</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="importing-data">Importing data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
 </h2>
@@ -178,7 +181,7 @@ into problems after joining several surveys.</p>
 <span><span class="co">#&gt; [4] "_:unknownauthor &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; ."                                        </span></span>
 <span><span class="co">#&gt; [5] "&lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; ."</span></span>
 <span><span class="co">#&gt; [6] "&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; ."                       </span></span>
-<span><span class="co">#&gt; [7] "&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \"2026-05-20T17:54:29Z\"^^&lt;xsd:dateTime&gt; ."                         </span></span>
+<span><span class="co">#&gt; [7] "&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \"2026-05-20T17:56:01Z\"^^&lt;xsd:dateTime&gt; ."                         </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $subject</span></span>
 <span><span class="co">#&gt; $term</span></span>

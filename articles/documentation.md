@@ -3,6 +3,9 @@
 ``` r
 
 library(retroharmonize)
+#> Warning: S3 methods 'vec_cast.retroharmonize_labelled_spss_survey',
+#> 'vec_ptype2.retroharmonize_labelled_spss_survey' were declared in NAMESPACE but
+#> not found
 
 examples_dir <- system.file("examples", package = "retroharmonize")
 my_rds_files <- dir(examples_dir)[grepl(

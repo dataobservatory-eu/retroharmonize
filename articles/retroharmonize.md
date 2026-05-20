@@ -8,6 +8,9 @@ testing and illustration purposes.
 ``` r
 
 library(retroharmonize)
+#> Warning: S3 methods 'vec_cast.retroharmonize_labelled_spss_survey',
+#> 'vec_ptype2.retroharmonize_labelled_spss_survey' were declared in NAMESPACE but
+#> not found
 ```
 
 ## Importing data
@@ -125,7 +128,7 @@ attributes(ZA5913_survey)
 #> [4] "_:unknownauthor <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> ."                                        
 #> [5] "<https://doi.org/10.32614/CRAN.package.dataset> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> ."
 #> [6] "<http://example.com/creation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> ."                       
-#> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-05-20T17:54:29Z\"^^<xsd:dateTime> ."                         
+#> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-05-20T17:56:01Z\"^^<xsd:dateTime> ."                         
 #> 
 #> $subject
 #> $term
