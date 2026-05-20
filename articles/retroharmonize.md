@@ -125,7 +125,7 @@ attributes(ZA5913_survey)
 #> [4] "_:unknownauthor <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> ."                                        
 #> [5] "<https://doi.org/10.32614/CRAN.package.dataset> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> ."
 #> [6] "<http://example.com/creation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> ."                       
-#> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-05-20T07:03:14Z\"^^<xsd:dateTime> ."                         
+#> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-05-20T17:48:35Z\"^^<xsd:dateTime> ."                         
 #> 
 #> $subject
 #> $term
@@ -191,9 +191,9 @@ document_surveys(survey_paths = file.path(examples_dir, survey_files))
 #> # A tibble: 3 × 8
 #>   id     filename    ncol  nrow object_size file_size accessed     last_modified
 #>   <chr>  <chr>      <dbl> <dbl>       <dbl>     <dbl> <chr>        <chr>        
-#> 1 ZA5913 ZA5913.rds    37    35      118168      6507 2026-05-20 … 2026-05-20 0…
-#> 2 ZA6863 ZA6863.rds    48    50      152704      8738 2026-05-20 … 2026-05-20 0…
-#> 3 ZA7576 ZA7576.rds    55    45      173632      9312 2026-05-20 … 2026-05-20 0…
+#> 1 ZA5913 ZA5913.rds    37    35      118168      6507 2026-05-20 … 2026-05-20 1…
+#> 2 ZA6863 ZA6863.rds    48    50      152704      8738 2026-05-20 … 2026-05-20 1…
+#> 3 ZA7576 ZA7576.rds    55    45      173632      9312 2026-05-20 … 2026-05-20 1…
 ```
 
 This will easily fit into the memory, so let us explore a bit further.
