@@ -91,7 +91,7 @@ vec_cast.character.retroharmonize_labelled_spss_survey <- function(
 
 
 ## Prototype --------------------------------------
-#' @rdname labelled_spss_survey_vctrs
+# see registration.R
 #' @export
 vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
   x,
@@ -245,7 +245,6 @@ vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_surv
   c_vector
 }
 
-#' @importFrom haven is_tagged_na
 #' @export
 vec_cast.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey <- function(
   x,

@@ -6,38 +6,36 @@ Local:
 r_hub:
 * various platforms, mac, Windows, Ubuntu, Fedora.
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
-There are two NOTES:
+0 errors ✔ | 0 warnings ✔ | 2 notes 
 
-## resubmission 
+## Resubmission
 
-- The 0.2.8 is a resubmission of 0.2.7 that was offered out of the time
-window to retain the package on CRAN due to an archived dependency.
+Version 0.2.8 is a resubmission of 0.2.7.
 
-## NOTE 1
-X-CRAN-Comment: Archived on 2026-01-30 as requires archived package
-    'dataset'.
-    
-`dataset` is on CRAN again. 
+The package had previously been archived because dependency dataset
+was temporarily archived from CRAN:
 
-## NOTE 1
-lines wider than 90 characters:
-The >90 character usage line is auto-generated for an exported S3 method with 
-a long class name and cannot be shortened without breaking the public API; 
-a shorter class name would hide the inheritance of this class.
-`retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey` 
+- X-CRAN-Comment: Archived on 2026-01-30 as requires archived package
+'dataset'.
 
-## NOTE 3
+The dependency dataset has since returned to CRAN and all checks now pass.
 
-installed size is  5.7Mb
-     sub-directories of 1Mb or more:
-       doc        1.1Mb
-       examples   1.9Mb
+### Notes
+Automatically generated Rd usage lines for certain vctrs
+double-dispatch S3 methods exceed 90 characters. This is due to
+standard vctrs method naming conventions and does not affect
+package functionality.
 
-The size of the package did not increse since the last release on CRAN. 
-Because of the nature of the package (harmonizing real-life surveys) the
-examples are relatively great in size (with permission, we use small subsets of 
-actual Eurobarometer surveys.) This makes unit-testing and documenting with 
-vignettes much easier and more realistic for the user.
+Installed size is 5.7 MB.
+
+Subdirectories larger than 1 MB:
+
+doc 1.1 MB
+examples 1.9 MB
+
+The package contains small, permission-cleared subsets of real survey
+datasets used for examples, testing, and vignettes. These datasets are
+necessary to demonstrate realistic harmonization workflows, and had been 
+on CRAN for 6 years.
 
 

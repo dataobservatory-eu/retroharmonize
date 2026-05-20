@@ -9,7 +9,6 @@
 \alias{vec_cast.double.retroharmonize_labelled_spss_survey}
 \alias{vec_cast.integer.retroharmonize_labelled_spss_survey}
 \alias{vec_cast.character.retroharmonize_labelled_spss_survey}
-\alias{vec_ptype2.retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey}
 \title{vctrs type and casting methods for labelled survey vectors}
 \usage{
 \method{vec_ptype2}{retroharmonize_labelled_spss_survey.double}(x, y, ...)
@@ -25,8 +24,6 @@
 \method{vec_cast}{integer.retroharmonize_labelled_spss_survey}(x, to, ...)
 
 \method{vec_cast}{character.retroharmonize_labelled_spss_survey}(x, to, ...)
-
-\method{vec_ptype2}{retroharmonize_labelled_spss_survey.retroharmonize_labelled_spss_survey}(x, y, ..., x_arg = "", y_arg = "")
 }
 \description{
 These methods define how
