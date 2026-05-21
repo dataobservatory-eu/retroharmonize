@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/rOpenGov/retroharmonize/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/rOpenGov/retroharmonize/blob/0.2.8/DESCRIPTION)
 
 Antal D (2026). *retroharmonize: Ex Post Survey Data Harmonization*. R
 package version 0.2.8, <https://retroharmonize.dataobservatory.eu/>.
